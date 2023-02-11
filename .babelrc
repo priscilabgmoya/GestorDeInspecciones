@@ -1,0 +1,4 @@
+/*sirve para configurar javascript moderno a codigo de javascript estandar(que sea lo mas entendible posible)*/
+{
+    "presets": ["@babel/preset-env"]
+}

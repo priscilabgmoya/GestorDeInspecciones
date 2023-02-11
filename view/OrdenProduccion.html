@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Gestor de inspeccion</title>
+   
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+          <a class="navbar-brand disabled" readonly=»readonly» href="#">Gestor de inspeccion</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav me-auto mb-2 mb-md-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="./OrdenProduccion.html">Crear Orden Produccion</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./LineaControl.html">Linea de Control</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./Semaforo.html">Semaforo</a>
+              </li>
+            </ul>
+            <form class="d-flex">
+              <a class="btn btn-outline-success"  href="../IniciarSesion.html">Salir</a>
+            </form>
+          </div>
+        </div>
+    </nav>
+</header>
+<main>
+    <section class="container-fluid d-flex  justify-content-center  m"  id="OrdenProduccion">
+     <div  class="row  border border-dark m-5">
+           <article class="row -xl-12">
+               <p class = " h1 text-center d-flex justify-content-center">Creacion de Orden de Producción</p>
+               <p class="h5">Datos de Orden de Produccion: </p>
+           </article>
+            <article class="row">
+                <div class = "col-xl-5 p-2 d-flex justify-content-center">
+                  <b>Nombre Supervisor de Linea:  </b>
+                  <br>
+                  <input type=»text» readonly=»readonly» id="inputSupervisorLinea" style="width: 50%; border: none;" />
+                </div>
+             
+                <div class = "col-xl-5 p-2  d-flex justify-content-center">
+                    <b>Turno:</b>
+                    <br>
+                    <input type=»text» readonly=»readonly» id="inputTurno" style="width: 50%; border: none" />
+                </div>
+               
+            </article>
+            <br>
+      <hr>
+      <br>
+          <!--ver autocompletado y agrandar los combos -->
+          <article class="row d-flex justify-content-around">
+                          <aside class="col-xl-5"><a>Orden de Produccion: </a><input  type="text" id="inputNroOrdenProduccion" style="width: 45%;"></aside>
+
+                            <aside class="col-xl-5  py-2"> <a>Nro. de Linea:   </a><select name="select" style="width: 75%;"  id="nroLinea">
+                              <option value="-">Seleccionar Nro. de Linea</option>
+                            </select> </aside>
+
+                            
+                            <aside class="col-xl-5  py-2"><a>Modelo:  </a><select name="select" style="width: 75%;" id="tipoModelo">
+                              <option value="-">Seleccionar Modelo </option>
+                            </select></aside>
+         
+                            <aside class="col-xl-5 py-2"><a>Color:  </a><select name="select" style="width: 75%;"  id="tipoColor">
+                              <option value="-">Seleccionar Color</option>
+                            </select> </aside>
+          </article>
+          <br>          
+            <article class="d-flex justify-content-center py-4">
+                <br>
+                <button class="btn btn-success " type="button"" id="btnCrearOrdenProduccion" >CREAR ORDEN DE PRODUCCIÓN</button>
+                <br>
+            </article>
+     </div>
+    </section>
+
+</main>
+    
+  <script src="../controller/ControladorOrdenProduccion.js"></script>
+    
+</body>
+</html>

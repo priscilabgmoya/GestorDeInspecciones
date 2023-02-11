@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>Semaforo</title>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand disabled" readonly=»readonly» href="#">Gestor de inspeccion</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarCollapse">
+          <form class="">
+            <a class="btn btn-success"  href="../IniciarSesion.html">Salir</a>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </header>
+    <main >
+        <section  class= "container-fluid d-flex  justify-content-center" id="semaforo">
+          <article class="row p-4 border border-dark m-3">
+            <aside  class="col">
+                <aside class=" p-2 text-center">
+                    <h1>Consulta de Semáforos</h1>
+                </aside>
+                <aside class="card"style="padding: 6px; margin: 6px; width: 400px;">
+                    <h3>Linea de producción:</h3>
+                    <label class="form-label">LINEA Nº:</label>
+                    <div style="width: 70px;"></div>
+                    <input class="form-control form-control-sm dni" type="number" name="linea" style="width: 200px;"> 
+                    <br>
+                    <button class="btn btn-outline-primary btn-sm buscar" type="submit">Cargar</button>
+                </aside>
+            </aside>
+            <aside class="row p-2">
+                <aside class="col">
+                    <div class="card" style="padding: 6px; margin: 6px;">
+                        <h4>Semáforo de REPROCESADOS</h4>
+                        <label class="form-label">Cantidad de defectos para reprocesar encontrados:</label>
+                        <input class="form-control form-control-sm dni" type="number" name="dni" style="width: 200px;">
+                        <br>
+                        <div class="d-flex justify-content-center" style="background-color: lightgrey; width: 200px; padding: 5px;">
+                            <div class="card" style="background-color: red; width: 40px; height: 40px; margin: 0 5px;"></div>
+                            <div class="card" style="background-color: yellow; width: 40px; height: 40px; margin: 0 5px;"></div>
+                            <div class="card" style="background-color:green;width: 40px; height: 40px; margin: 0 5px;"></div>
+                        </div>                       
+                    </div>
+                </aside>
+
+                <aside class="col">
+                    <div class="card" style="padding: 6px; margin: 6px;">
+                        <h4>Semáforo de OBSERVADOS</h4>
+                        <label class="form-label">Cantidad de defectos para observación encontrados:</label>
+                        <input class="form-control form-control-sm dni" type="number" name="dni" style="width: 200px;">
+                        <br>
+
+                        <div class="d-flex justify-content-center" style="background-color: lightgrey; width: 200px; padding: 5px">
+                            <div class="card" style="background-color: red; width: 40px; height: 40px; margin: 0 5px;"></div>
+                            <div class="card" style="background-color: yellow; width: 40px; height: 40px; margin: 0 5px;"></div>
+                            <div class="card" style="background-color:green;width: 40px; height: 40px; margin: 0 5px;"></div>
+                        </div>                       
+                    </div>
+                </aside>
+            </aside>
+            <button class="btn btn-outline-info btnCrear mt6" type="submit">Refrescar</button>
+          </article>
+        </section>
+    </main>
+</body>
+</html>
