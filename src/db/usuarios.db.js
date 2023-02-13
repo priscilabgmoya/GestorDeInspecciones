@@ -31,6 +31,7 @@ module.exports.getUsuarioRegistrado = async function (dni) {
     return Promise.reject(err);
   }
 };
+
 module.exports.buscarUsuario = async function (dni) {
   let conn;
   try {
@@ -39,6 +40,18 @@ module.exports.buscarUsuario = async function (dni) {
       dni,
     ]);
     return row[0];
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+module.exports.getNombreApellido = async function (dni) {
+  let conn;
+  try {
+    conn = await getConnection();
+    const row = await conn.query(`SELECT  nombre, apellido FROM ${tablaEmpleado} WHERE dni=?`, [
+      dni,
+    ]);
+    return row;
   } catch (err) {
     return Promise.reject(err);
   }

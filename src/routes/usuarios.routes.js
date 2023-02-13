@@ -12,14 +12,6 @@ router.get("/gestionarUsuario/:activos", async (req, res) => {
   }
 });
 
-router.get("/usuarioRegistrado/:dni", async (req, res) => {
-  const usuarioRegistrado = await db.Usuario.getUsuarioRegistrado(req.params.dni);
-  if (usuarioRegistrado) {
-    res.status(200).json(usuarioRegistrado);
-  } else {
-    res.status(404).send("El DNI no se encuentra Registrado! ");
-  }
-});
 router.get("/gestionarUsuario/buscarEmpleado/:dni", async (req, res) => {
   const usuarioEncontrado = await db.Usuario.buscarUsuario(req.params.dni);
   if (usuarioEncontrado) {
@@ -28,6 +20,7 @@ router.get("/gestionarUsuario/buscarEmpleado/:dni", async (req, res) => {
     res.status(404).send("Empleado no encontardos!");
   }
 });
+
 router.post("/gestionarUsuario/altaUsuario", async (req, res) => {
   if (!req.body.dni) {
     res.status(400).send("DNI es requerido");
@@ -101,4 +94,23 @@ router.get("/usuario/idEmpleado/:descripcion", async (req, res) => {
   );
   res.status(200).json(id_tipo_empleado);
 });
+
+router.get("/usuarioRegistrado/:dni", async (req, res) => {
+  const usuarioRegistrado = await db.Usuario.getUsuarioRegistrado(req.params.dni);
+  if (usuarioRegistrado) {
+    res.status(200).json(usuarioRegistrado);
+  } else {
+    res.status(404).send("El DNI no se encuentra Registrado! ");
+  }
+});
+
+router.get("/nombreApellidoUsuario/:dni", async(req,res)=>{
+  const nombreApellidoUsuario = await db.Usuario.getNombreApellido(req.params.dni);
+  if (nombreApellidoUsuario) {
+    res.status(200).json(nombreApellidoUsuario);
+  } else {
+    res.status(404).send("No se encontro nombre y apellido del DNI ingresado! ");
+  }
+});
+
 module.exports = router;
