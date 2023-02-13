@@ -12,10 +12,10 @@ var dniUsuario = localStorage.getItem("dniUsuario");
 let turnosCargados = {};
 
 
+cargarTurnos();
   opcionesLineas(selectorLinea);
   opcionesSelector(urlModelo, selectorModelo);
   opcionesSelector(urlColor, selectorColor);
-  cargarTurnos();
   cargarDatosEmpleados();
 
 
@@ -38,9 +38,8 @@ function cargarDatosEmpleados() {
     horaIngreso <= turnosCargados.hora_salida_mañana
   ) {
     $("#inputTurno").val(turnosCargados.descripcion_mañana);
-  } else {
-    alert("Fuera de Rango de Trabajo");
-  }
+  } 
+
   fetch(`http://localhost:3308/nombreApellidoUsuario/${dniUsuario}`)
     .then((res) => res.json())
     .then((data) => cargarNombre(data[0]))

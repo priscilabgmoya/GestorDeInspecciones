@@ -17,6 +17,7 @@ const verificarRegistro = (estadoRespuesta)=>{
     .catch((error) => console.log(error));
   }else{
     alert("DNi no se encuentra registrado");
+    $("#ventanaCrearUsuario").modal("show");
   }
 }
 }
@@ -53,4 +54,43 @@ function redireccionPantallaDeTrabajo(tipoEmpleado) {
     if(tipoEmpleado === 'administrativo'){
     window.location.href = "../view/GestionarUsuario.html";
     }
+}
+
+$("#btnGuardarUsuarioModal").on("click", function () {
+  CrearUsuario();
+});
+function CrearUsuario() {
+  let dni =$("#inputDniModal").val(),
+    nombre = $("#inputNombreModal").val(),
+    apellido = $("#inputApellidoModal").val(),
+    correo = $("#inputCorreoElectronicoModal").val();
+    
+  let nuevoUsuario = {
+    dni: dni,
+    nombre: nombre,
+    apellido: apellido,
+    correo_electronico: correo,
+    id_tipo_empleado: "",
+    contraseña: generatePassword(),
+    registro: activo,
+  };
+
+      fetch(`http://localhost:3308/gestionarUsuario/altaUsuario`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nuevoUsuario),
+      }).catch((error) => console.log(error));
+      alert("Usuario Creado!!");
+      location.reload();
+  
+}
+function generatePassword() {
+  var pass = "";
+  var str =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz0123456789@#$";
+  for (let i = 1; i <= 8; i++) {
+    var char = Math.floor(Math.random() * str.length + 1);
+    pass += str.charAt(char);
+  }
+  return pass;
 }
