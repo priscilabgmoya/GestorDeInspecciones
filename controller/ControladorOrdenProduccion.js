@@ -9,37 +9,16 @@ const urlModelo = `http://localhost:3308/gestionarModelo/denominacion/${activo}`
 const urlColor = `http://localhost:3308/gestionarColor/descripcion/${activo}`;
 
 var dniUsuario = localStorage.getItem("dniUsuario");
-let turnosCargados = {};
 
-
+opcionesLineas(selectorLinea);
+opcionesSelector(urlModelo, selectorModelo);
+opcionesSelector(urlColor, selectorColor);
 cargarTurnos();
-  opcionesLineas(selectorLinea);
-  opcionesSelector(urlModelo, selectorModelo);
-  opcionesSelector(urlColor, selectorColor);
-  cargarDatosEmpleados();
+cargarDatosEmpleados();
 
-
-$("#btnCrearOrdenProduccion").on("click", function () {
-
-  
-});
+$("#btnCrearOrdenProduccion").on("click", function () {});
 
 function cargarDatosEmpleados() {
-  const date = new Date();
-  var horaIngreso = date.toLocaleTimeString();
-  if (
-    horaIngreso >= turnosCargados.hora_entrada_tarde &&
-    horaIngreso <= turnosCargados.hora_salida_tarde
-  ) {
-    $("#inputTurno").val(turnosCargados.descripcion_tarde);
-  }
-  if (
-    horaIngreso >= turnosCargados.hora_entrada_mañana &&
-    horaIngreso <= turnosCargados.hora_salida_mañana
-  ) {
-    $("#inputTurno").val(turnosCargados.descripcion_mañana);
-  } 
-
   fetch(`http://localhost:3308/nombreApellidoUsuario/${dniUsuario}`)
     .then((res) => res.json())
     .then((data) => cargarNombre(data[0]))
@@ -49,6 +28,9 @@ function cargarDatosEmpleados() {
   };
 }
 function cargarTurnos() {
+  const date = new Date();
+  var horaIngreso = date.toLocaleTimeString();
+
   fetch(`http://localhost:3308/turnosDisponibles`)
     .then((res) => res.json())
     .then((data) => obtenerTurno(data))
@@ -56,14 +38,22 @@ function cargarTurnos() {
 
   const obtenerTurno = (dato) => {
     dato.forEach((turnos) => {
-      if (turnos.descripcion === "mañana") {
-        turnosCargados.descripcion_mañana = turnos.descripcion;
-        turnosCargados.hora_entrada_mañana = turnos.hora_entrada;
-        turnosCargados.hora_salida_mañana = turnos.hora_salida;
-      } else {
-        turnosCargados.descripcion_tarde = turnos.descripcion;
-        turnosCargados.hora_entrada_tarde = turnos.hora_entrada;
-        turnosCargados.hora_salida_tarde = turnos.hora_salida;
+      if (
+        turnos.descripcion === "mañana" &&
+        horaIngreso >= turnos.hora_entrada &&
+        horaIngreso <= turnos.hora_salida
+      ) {
+        $("#inputTurno").val(turnos.descripcion);
+      }
+      if (
+        turnos.descripcion === "tarde" &&
+        horaIngreso >= turnos.hora_entrada &&
+        horaIngreso <= turnos.hora_salida
+      ) {
+        $("#inputTurno").val(turnos.descripcion);
+      }
+      else {
+        $("#inputTurno").val('fuera de rango de horario');
       }
     });
   };
