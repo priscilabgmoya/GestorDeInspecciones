@@ -8,15 +8,15 @@ const selectorColor = document.getElementById("tipoColor");
 const urlModelo = `http://localhost:3308/gestionarModelo/denominacion/${activo}`;
 const urlColor = `http://localhost:3308/gestionarColor/descripcion/${activo}`;
 
-var dniUsuario = localStorage.getItem("dniUsuario");
+var dniUsuario = window.localStorage.getItem("dniUsuario");
 let turnosCargados = {};
 
 
+opcionesLineas(selectorLinea);
+opcionesSelector(urlModelo, selectorModelo);
+opcionesSelector(urlColor, selectorColor);
+cargarDatosEmpleados();
 cargarTurnos();
-  opcionesLineas(selectorLinea);
-  opcionesSelector(urlModelo, selectorModelo);
-  opcionesSelector(urlColor, selectorColor);
-  cargarDatosEmpleados();
 
 
 $("#btnCrearOrdenProduccion").on("click", function () {
@@ -38,7 +38,9 @@ function cargarDatosEmpleados() {
     horaIngreso <= turnosCargados.hora_salida_mañana
   ) {
     $("#inputTurno").val(turnosCargados.descripcion_mañana);
-  } 
+  } else{
+    alert('fuera de rango de trabajo'); 
+  }
 
   fetch(`http://localhost:3308/nombreApellidoUsuario/${dniUsuario}`)
     .then((res) => res.json())

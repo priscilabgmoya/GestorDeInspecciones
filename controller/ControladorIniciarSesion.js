@@ -38,7 +38,8 @@ function redireccionPantallaDeTrabajo(tipoEmpleado) {
    * si es supervisor de linea 
    */
   if(tipoEmpleado === 'supervisor de linea'){
-    window.location.href = "../view/OrdenProduccion.html";
+    window.location.href='../view/OrdenProduccion.html';
+    window.localStorage.setItem("dniUsuario", $("#usuarioInput").val());
   }
     /**
      * si es supervisor de calidad 
