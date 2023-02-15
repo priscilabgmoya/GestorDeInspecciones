@@ -15,3 +15,14 @@ module.exports.getTurnos = async function(){
        return Promise.reject(err);
     }
 }
+module.exports.getIdTurno = async function(descripcion){
+    let conn; 
+    try {
+        conn = await getConnection();
+        const SQL =  `SELECT id_turno FROM ${tablaTurno} WHERE descripcion=?`;
+        const rows = await conn.query(SQL,[descripcion]);
+        return rows; 
+    } catch (err) {
+       return Promise.reject(err);
+    }
+}
