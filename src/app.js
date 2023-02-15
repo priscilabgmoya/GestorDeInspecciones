@@ -30,5 +30,5 @@ app.use(route.rutasGestionUsuarios);
 app.use(route.rutasGestionColor);
 app.use(route.rutasNroLinea);
 app.use(route.rutasTurno);
-
+app.use(route.rutasOrdenProduccion);
 export default app; 

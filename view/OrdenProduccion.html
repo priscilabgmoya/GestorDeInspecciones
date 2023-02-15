@@ -63,25 +63,27 @@
       <br>
           <!--ver autocompletado y agrandar los combos -->
           <article class="row d-flex justify-content-around">
-                          <aside class="col-xl-5"><a>Orden de Produccion: </a><input  type="text" id="inputNroOrdenProduccion" style="width: 45%;"></aside>
+                          <aside class="col-xl-5"><a>Nro. Orden de Produccion: </a><input  type="number" id="inputNroOrdenProduccion" style="width: 45%;" required></aside>
 
-                            <aside class="col-xl-5  py-2"> <a>Nro. de Linea:   </a><select name="select" style="width: 75%;"  id="nroLinea">
+                            <aside class="col-xl-5  py-2"> <a>Nro. de Linea:   </a><select name="select" style="width: 75%;"  id="nroLinea" required>
                               <option value="-">Seleccionar Nro. de Linea</option>
                             </select> </aside>
 
                             
-                            <aside class="col-xl-5  py-2"><a>Modelo:  </a><select name="select" style="width: 75%;" id="tipoModelo">
+                            <aside class="col-xl-5  py-2"><a>Modelo:  </a><select name="select" style="width: 75%;" id="tipoModelo" required>
                               <option value="-">Seleccionar Modelo </option>
                             </select></aside>
          
-                            <aside class="col-xl-5 py-2"><a>Color:  </a><select name="select" style="width: 75%;"  id="tipoColor">
+                            <aside class="col-xl-5 py-2"><a>Color:  </a><select name="select" style="width: 75%;"  id="tipoColor" required>
                               <option value="-">Seleccionar Color</option>
                             </select> </aside>
           </article>
           <br>          
-            <article class="d-flex justify-content-center py-4">
+            <article class="d-flex justify-content-between py-4">
                 <br>
-                <button class="btn btn-success " type="button"" id="btnCrearOrdenProduccion" >CREAR ORDEN DE PRODUCCIÓN</button>
+                <button class="btn btn-warning " type="button"" id="btnModificarOrdenProduccion" disabled>MODIFICAR</button>
+                <button class="btn btn-success " type="button"" id="btnCrearOrdenProduccion" disabled >CREAR ORDEN DE PRODUCCIÓN</button>
+                <button class="btn btn-danger" type="button"" id="btnCancelarOrdenProduccion" >CANCELAR </button>
                 <br>
             </article>
      </div>

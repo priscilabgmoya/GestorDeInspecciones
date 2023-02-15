@@ -19,9 +19,21 @@ opcionesSelector(urlColor, selectorColor);
 cargarTurnos();
 cargarDatosEmpleados();
 
+$("#btnCrearOrdenProduccion").on("click", function () {
+   nro_orden_produccion= $("#inputNroOrdenProduccion").val();
+   fetch(`http://localhost:3308/buscarOrdenProduccion/${nro_orden_produccion}`)
+   .then((res) => verificarNroOrdenProduccion(res.status))
+   .catch((error) => console.log(error));
 
-$("#btnCrearOrdenProduccion").on("click", function () {});
+});
+function verificarNroOrdenProduccion(estadoDeRespuesta){
+  if (estadoDeRespuesta === 200){
+    alert('Error: Ya existe Nro de Orden de Produccion');
+    location.reload();
+  }else{
 
+  }
+}
 function cargarDatosEmpleados() {
 
   fetch(`http://localhost:3308/nombreApellidoUsuario/${dniUsuario}`)
@@ -49,6 +61,7 @@ function cargarTurnos() {
         horaIngreso <= turnos.hora_salida
       ) {
         $("#inputTurno").val(turnos.descripcion);
+        $("#btnCrearOrdenProduccion").prop("disabled", false);
       }
       if (
         turnos.descripcion === "tarde" &&
@@ -56,6 +69,7 @@ function cargarTurnos() {
         horaIngreso <= turnos.hora_salida
       ) {
         $("#inputTurno").val(turnos.descripcion);
+        $("#btnCrearOrdenProduccion").prop("disabled", false);
       }
       else {
         $("#inputTurno").val('fuera de rango de horario');
