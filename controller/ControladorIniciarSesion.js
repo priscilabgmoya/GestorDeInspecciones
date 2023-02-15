@@ -1,10 +1,10 @@
-
+const date = new Date();
 $("#btnIniciarSesion").on('click', function(){
   iniciarSesion ();
 })
 function iniciarSesion (){
   var dni = $("#usuarioInput").val();
-
+  cargarTurnos();
 fetch(`http://localhost:3308/gestionarUsuario/buscarEmpleado/${dni}`)
 .then((res) =>verificarRegistro(res.status))
 .catch((error) => console.log(error));
@@ -31,8 +31,39 @@ const verificarRegistro = (estadoRespuesta)=>{
   }
  }
  function crearJornadaLaboral(){
-
+  var fecha_inicio = date.toLocaleDateString();
  }
+
+ function cargarTurnos() {
+
+  var horaIngreso = date.toLocaleTimeString();
+  fetch(`http://localhost:3308/turnosDisponibles`)
+  .then((res) => res.json())
+  .then((data) => obtenerTurno(data))
+  .catch((error) => console.log(error));
+  
+  const obtenerTurno = (dato) => {
+    let  turno  ;
+    dato.forEach((turnos) => {
+      if (
+        turnos.descripcion === "mañana" &&
+        horaIngreso >= turnos.hora_entrada &&
+        horaIngreso <= turnos.hora_salida
+      ) { 
+       turno = turnos.descripcion;
+      }
+      if (
+        turnos.descripcion === "tarde" &&
+        horaIngreso >= turnos.hora_entrada &&
+        horaIngreso <= turnos.hora_salida
+      ) {
+        turno = turnos.descripcion;
+      }
+    });
+    window.localStorage.setItem("turnoIngreso", turno);
+  };
+}
+
 function redireccionPantallaDeTrabajo(tipoEmpleado) {
   /**
    * si es supervisor de linea 
@@ -89,6 +120,15 @@ function generatePassword() {
   var pass = "";
   var str =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ" + "abcdefghijklmnopqrstuvwxyz0123456789@#$";
+  for (let i = 1; i <= 8; i++) {
+    var char = Math.floor(Math.random() * str.length + 1);
+    pass += str.charAt(char);
+  }
+  return pass;
+}
+function generateID() {
+  var pass = "";
+  var str = "0123456789";
   for (let i = 1; i <= 8; i++) {
     var char = Math.floor(Math.random() * str.length + 1);
     pass += str.charAt(char);

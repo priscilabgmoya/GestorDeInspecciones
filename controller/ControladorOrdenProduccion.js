@@ -10,13 +10,13 @@ const urlColor = `http://localhost:3308/gestionarColor/descripcion/${activo}`;
 
 
 var dniUsuario = window.localStorage.getItem("dniUsuario");
-
+var turnoIngreso = window.localStorage.getItem("turnoIngreso");
 
 opcionesLineas(selectorLinea);
 opcionesSelector(urlModelo, selectorModelo);
 opcionesSelector(urlColor, selectorColor);
 
-cargarTurnos();
+habilitarBotones(turnoIngreso);
 cargarDatosEmpleados();
 
 $("#btnCrearOrdenProduccion").on("click", function () {
@@ -35,7 +35,6 @@ function verificarNroOrdenProduccion(estadoDeRespuesta){
   }
 }
 function cargarDatosEmpleados() {
-
   fetch(`http://localhost:3308/nombreApellidoUsuario/${dniUsuario}`)
     .then((res) => res.json())
     .then((data) => cargarNombre(data[0]))
@@ -44,39 +43,10 @@ function cargarDatosEmpleados() {
     $("#inputSupervisorLinea").val(` ${data.nombre} ${data.apellido}`);
   };
 }
-function cargarTurnos() {
-  const date = new Date();
-  var horaIngreso = date.toLocaleTimeString();
-
-  fetch(`http://localhost:3308/turnosDisponibles`)
-    .then((res) => res.json())
-    .then((data) => obtenerTurno(data))
-    .catch((error) => console.log(error));
-
-  const obtenerTurno = (dato) => {
-    dato.forEach((turnos) => {
-      if (
-        turnos.descripcion === "mañana" &&
-        horaIngreso >= turnos.hora_entrada &&
-        horaIngreso <= turnos.hora_salida
-      ) {
-        $("#inputTurno").val(turnos.descripcion);
-        $("#btnCrearOrdenProduccion").prop("disabled", false);
-      }
-      if (
-        turnos.descripcion === "tarde" &&
-        horaIngreso >= turnos.hora_entrada &&
-        horaIngreso <= turnos.hora_salida
-      ) {
-        $("#inputTurno").val(turnos.descripcion);
-        $("#btnCrearOrdenProduccion").prop("disabled", false);
-      }
-      else {
-        $("#inputTurno").val('fuera de rango de horario');
-      }
-    });
-  };
+function habilitarBotones(turno){
+  $("#inputTurno").val(turno);
 }
+$("#btnCrearOrdenProduccion").prop("disabled", false);
 function opcionesSelector(url, selector) {
   fetch(`${url}`)
     .then((res) => res.json())
