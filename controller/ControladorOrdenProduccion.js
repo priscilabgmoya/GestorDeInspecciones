@@ -8,11 +8,14 @@ const selectorColor = document.getElementById("tipoColor");
 const urlModelo = `http://localhost:3308/gestionarModelo/denominacion/${activo}`;
 const urlColor = `http://localhost:3308/gestionarColor/descripcion/${activo}`;
 
-var dniUsuario = localStorage.getItem("dniUsuario");
+
+var dniUsuario = window.localStorage.getItem("dniUsuario");
+
 
 opcionesLineas(selectorLinea);
 opcionesSelector(urlModelo, selectorModelo);
 opcionesSelector(urlColor, selectorColor);
+
 cargarTurnos();
 cargarDatosEmpleados();
 
@@ -32,6 +35,7 @@ function verificarNroOrdenProduccion(estadoDeRespuesta){
   }
 }
 function cargarDatosEmpleados() {
+
   fetch(`http://localhost:3308/nombreApellidoUsuario/${dniUsuario}`)
     .then((res) => res.json())
     .then((data) => cargarNombre(data[0]))
