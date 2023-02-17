@@ -1,41 +1,38 @@
-const activo = 1;
+const disponibles = 1;
 const disponibilidad = "disponible";
-
-const selectorLinea = document.getElementById("nroLinea");
-const selectorModelo = document.getElementById("tipoModelo");
-const selectorColor = document.getElementById("tipoColor");
-
-const urlModelo = `http://localhost:3308/gestionarModelo/denominacion/${activo}`;
-const urlColor = `http://localhost:3308/gestionarColor/descripcion/${activo}`;
-
+const activa = 0;
+const selectorLinea = document.getElementById("listadoNroLinea");
+const selectorModelo = document.getElementById("listadoModelo");
+const selectorColor = document.getElementById("listadoColor");
+const date = new Date();
+const urlModelo = `http://localhost:3308/modeloDenominacion/${disponibles}`;
+const urlColor = `http://localhost:3308/coloresDescripcion/${disponibles}`;
 
 var dniUsuario = window.localStorage.getItem("dniUsuario");
-
+var turnoIngreso = window.localStorage.getItem("turnoIngreso");
 
 opcionesLineas(selectorLinea);
-opcionesSelector(urlModelo, selectorModelo);
-opcionesSelector(urlColor, selectorColor);
+opcionesModelo(urlModelo, selectorModelo);
+opcionesColor(urlColor, selectorColor);
 
-cargarTurnos();
+habilitarBotones(turnoIngreso);
 cargarDatosEmpleados();
 
 $("#btnCrearOrdenProduccion").on("click", function () {
-   nro_orden_produccion= $("#inputNroOrdenProduccion").val();
-   fetch(`http://localhost:3308/buscarOrdenProduccion/${nro_orden_produccion}`)
-   .then((res) => verificarNroOrdenProduccion(res.status))
-   .catch((error) => console.log(error));
-
+  nro_orden_produccion = $("#inputNroOrdenProduccion").val();
+  fetch(`http://localhost:3308/buscarOrdenProduccion/${nro_orden_produccion}`)
+    .then((res) => verificarNroOrdenProduccion(res.status))
+    .catch((error) => console.log(error));
 });
-function verificarNroOrdenProduccion(estadoDeRespuesta){
-  if (estadoDeRespuesta === 200){
-    alert('Error: Ya existe Nro de Orden de Produccion');
+function verificarNroOrdenProduccion(estadoDeRespuesta) {
+  if (estadoDeRespuesta === 200) {
+    alert("Error: Ya existe Nro de Orden de Produccion");
     location.reload();
-  }else{
-
+  } else {
+    crearOrdenProduccion();
   }
 }
 function cargarDatosEmpleados() {
-
   fetch(`http://localhost:3308/nombreApellidoUsuario/${dniUsuario}`)
     .then((res) => res.json())
     .then((data) => cargarNombre(data[0]))
@@ -44,40 +41,23 @@ function cargarDatosEmpleados() {
     $("#inputSupervisorLinea").val(` ${data.nombre} ${data.apellido}`);
   };
 }
-function cargarTurnos() {
-  const date = new Date();
-  var horaIngreso = date.toLocaleTimeString();
+function habilitarBotones(turno) {
+  $("#inputTurno").val(turno);
 
-  fetch(`http://localhost:3308/turnosDisponibles`)
-    .then((res) => res.json())
-    .then((data) => obtenerTurno(data))
-    .catch((error) => console.log(error));
+  if (turno === "mañana" || turno === "tarde") {
+    $("#btnCrearOrdenProduccion").prop("disabled", false);
+    $("#inputNroOrdenProduccion").prop("disabled", false);
+    $("#inputNroLinea").prop("disabled", false);
+    $("#inputModelo").prop("disabled", false);
+    $("#inputColor").prop("disabled", false);
+  }
 
-  const obtenerTurno = (dato) => {
-    dato.forEach((turnos) => {
-      if (
-        turnos.descripcion === "mañana" &&
-        horaIngreso >= turnos.hora_entrada &&
-        horaIngreso <= turnos.hora_salida
-      ) {
-        $("#inputTurno").val(turnos.descripcion);
-        $("#btnCrearOrdenProduccion").prop("disabled", false);
-      }
-      if (
-        turnos.descripcion === "tarde" &&
-        horaIngreso >= turnos.hora_entrada &&
-        horaIngreso <= turnos.hora_salida
-      ) {
-        $("#inputTurno").val(turnos.descripcion);
-        $("#btnCrearOrdenProduccion").prop("disabled", false);
-      }
-      else {
-        $("#inputTurno").val('fuera de rango de horario');
-      }
-    });
-  };
+  if (turno === "undefined") {
+    alert("Fuera del Turno de Trabajo");
+  }
 }
-function opcionesSelector(url, selector) {
+
+function opcionesColor(url, selector) {
   fetch(`${url}`)
     .then((res) => res.json())
     .then((data) => mostrarOpciones(data))
@@ -87,6 +67,20 @@ function opcionesSelector(url, selector) {
     for (let categoria of data) {
       let nuevaOpcion = document.createElement("option");
       nuevaOpcion.text = categoria.descripcion;
+      selector.appendChild(nuevaOpcion);
+    }
+  };
+}
+function opcionesModelo(url, selector) {
+  fetch(`${url}`)
+    .then((res) => res.json())
+    .then((data) => mostrarOpciones(data))
+    .catch((error) => console.log(error));
+
+  const mostrarOpciones = (data) => {
+    for (let categoria of data) {
+      let nuevaOpcion = document.createElement("option");
+      nuevaOpcion.text = categoria.denominacion;
       selector.appendChild(nuevaOpcion);
     }
   };
@@ -101,8 +95,43 @@ function opcionesLineas(selector) {
   const mostrarOpciones = (data) => {
     for (let categoria of data) {
       let nuevaOpcion = document.createElement("option");
-      nuevaOpcion.text = categoria.nro_linea_de_trabajo;
+      nuevaOpcion.value = categoria.nro_linea_de_trabajo;
       selector.appendChild(nuevaOpcion);
     }
   };
+}
+
+function crearOrdenProduccion() {
+  /**
+   * Creamos el objeto orden de produccion
+   */
+  let nuevaOrdenProduccion = {
+    nro_orden_produccion: parseInt($("#inputNroOrdenProduccion").val()),
+    id_color: $("#inputColor").val(),
+    fecha:
+      "" +
+      date.getFullYear() +
+      "-" +
+      (date.getMonth() + 1) +
+      "-" +
+      date.getDate(),
+    estado: activa,
+    linea: parseInt($("#inputNroLinea").val()),
+    sku:$("#inputModelo").val(),
+    id_jornada_laboral: dniUsuario ,
+  };
+
+/**
+ * Guardamos la orden de produccion en el DB
+ */
+
+fetch(`http://localhost:3308/crearOrdenProduccion`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nuevaOrdenProduccion),
+      }).catch((error) => console.log(error));
+
+      alert('Orden de Produccion Creada');
+      
+console.log(nuevaOrdenProduccion)
 }

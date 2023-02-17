@@ -3,26 +3,24 @@ const tablaColor = "color";
 /**
  * Retornamos todos los colores
  */
-module.exports.getColores = async function (activos) {
+module.exports.getColores = async function () {
   let conn;
   try {
     conn = await getConnection();
     const rows = await conn.query(
-      `SELECT id_color , descripcion  FROM ${tablaColor} WHERE registro=?`,
-      [activos]
-    );
+      `SELECT id_color , descripcion  FROM ${tablaColor} `
+   );
     return rows;
   } catch (err) {
     return Promise.reject(err);
   }
 };
-module.exports.getColoresDescripcion = async function (activos) {
+module.exports.getColoresDescripcion = async function (disponibles) {
   let conn;
   try {
     conn = await getConnection();
     const rows = await conn.query(
-      `SELECT descripcion  FROM ${tablaColor} WHERE registro=?`,
-      [activos]
+      `SELECT descripcion  FROM ${tablaColor} WHERE registro=?`,[disponibles]
     );
     return rows;
   } catch (err) {
@@ -70,14 +68,13 @@ module.exports.buscarColor = async function (idColor) {
  * @param {Object} colorEliminado
  * @returns
  */
-module.exports.bajaLogicaColor = async function (colorEliminado) {
+module.exports.eliminarColor = async function (colorEliminado) {
   let conn;
   try {
     conn = await getConnection();
-    const SQL = `UPDATE ${tablaColor}  SET registro = ? WHERE id_color=?`;
+    const SQL = `DELETE FROM ${tablaColor} WHERE id_color=?`;
     const params = [];
-    params[0] = colorEliminado.registro;
-    params[1] = colorEliminado.id_color;
+    params[0] = colorEliminado.id_color;
     const row = await conn.query(SQL, params);
     return row;
   } catch (err) {
@@ -99,6 +96,37 @@ module.exports.modificarColor = async function (colorModificado) {
     params[1] = colorModificado.id_color;
     const row = await conn.query(SQL, params);
     return row;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+module.exports.disponibilidadColor = async function (colorSeleccionado){
+  let conn;
+  try{
+    conn = await getConnection();
+    const SQL = `UPDATE ${tablaColor}  SET registro = ? WHERE descripcion=?`;
+    const params=[]
+    params[0]=colorSeleccionado.registro
+    params[1]=colorSeleccionado.descripcion
+    const row = await conn.query(SQL,params);
+    return row;
+  }catch(err){
+    return Promise.reject(err);
+  }
+}
+/**
+ * Buscamos un id de color 
+ */
+module.exports.buscarColorId = async function (descripcion) {
+  let conn;
+  try {
+    conn = await getConnection();
+    const row = await conn.query(
+      `SELECT id_color FROM ${tablaColor} WHERE descripcion=?`,
+      [descripcion]
+    );
+    return row[0];
   } catch (err) {
     return Promise.reject(err);
   }

@@ -5,5 +5,6 @@ module.exports={
     Usuario: require('./usuarios.db'),
     OrdenProduccion: require('./ordenProduccion.db'),
     NroLinea: require('./lineaDeTrabajo.db'),
-    Turno: require('./turno.db')
+    Turno: require('./turno.db'), 
+    JornadaLaboral: require('./jornadaLaboral.db'), 
 }

@@ -31,4 +31,5 @@ app.use(route.rutasGestionColor);
 app.use(route.rutasNroLinea);
 app.use(route.rutasTurno);
 app.use(route.rutasOrdenProduccion);
+app.use(route.rutasJornadaLaboral);
 export default app; 

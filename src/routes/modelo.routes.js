@@ -2,12 +2,12 @@ import { Router } from "express";
 const db = require("../db/index");
 const router = Router();
 /** http://localhost:3308/gestionar */
-router.get("/gestionarModelo/:activo", async (req, res) => {
-  const modelo = await db.Modelo.getModelos(req.params.activo);
+router.get("/gestionarModelo/listado", async (req, res) => {
+  const modelo = await db.Modelo.getModelos();
     res.status(200).json(modelo);
 });
-router.get("/gestionarModelo/denominacion/:activo", async (req, res) => {
-  const modelo = await db.Modelo.getModelosDenominacion(req.params.activo);
+router.get("/modeloDenominacion/:disponibles", async (req, res) => {
+  const modelo = await db.Modelo.getModelosDenominacion(req.params.disponibles);
     res.status(200).json(modelo);
 });
 router.post("/gestionarModelo/altaModelo", async(req, res) => {
@@ -17,8 +17,8 @@ router.post("/gestionarModelo/altaModelo", async(req, res) => {
       return
     }
     
-    if(!req.body.descripcion){
-      res.status(400).send('Descripcion es Requerido!!!')
+    if(!req.body.denominacion){
+      res.status(400).send('Denominacion es Requerido!!!')
       return
     }
     
@@ -37,8 +37,8 @@ router.put("/gestionarModelo/modificarModelo",async (req, res) => {
     res.status(400).send('SKU es Requerido!!!')
     return
   }
-  if(!req.body.descripcion){
-    res.status(400).send('Descripcion es Requerido!!!')
+  if(!req.body.denominacion){
+    res.status(400).send('Denominacion es Requerido!!!')
     return
   }
   const isUpdateOk = await db.Modelo.modificarModelo(req.body)
@@ -48,15 +48,15 @@ router.put("/gestionarModelo/modificarModelo",async (req, res) => {
       res.status(500).send('Falló al modificar el Modelo!!!')
   }
 });
-router.put("/gestionarModelo/bajaLogicaModelo/",async (req, res) => {
+router.delete("/gestionarModelo/eliminarModelo",async (req, res) => {
    
   if(!req.body.sku){
     res.status(400).send('SKU es Requerido!!!')
     return
   }
-  const isUpdateOk = await db.Modelo.bajaLogicaModelo(req.body)
-  if(isUpdateOk){
-      res.status(200).json(isUpdateOk)
+  const isDeleteOk = await db.Modelo.eliminarModelo(req.body)
+  if(isDeleteOk){
+      res.status(200).json(isDeleteOk)
   }else{
       res.status(500).send('Falló al eliminar el Modelo!!!')
   }
@@ -72,4 +72,29 @@ router.get("/gestionarModelo/buscarModelo/:skuModelo", async (req, res) => {
       res.status(404).send('Modelo no encontrado!!!')
     }
 });
+
+
+router.put("/cambiarDisponibilidadModelo",async (req, res) => {
+   
+  if(!req.body.denominacion){
+    res.status(400).send('Denominacion es Requerido!!!')
+    return
+  }
+  const isUpdateOk = await db.Modelo.ocuparModelo(req.body)
+  if(isUpdateOk){
+      res.status(200).json(isUpdateOk)
+  }else{
+      res.status(500).send('Falló al ocupar el Modelo!!!')
+  }
+});
+
+router.get("/buscarModelo/obtenerSku/:denominacion", async (req, res) => {
+  const skuEncontrado = await db.Modelo.buscarModeloSku(req.params.denominacion);
+    if (skuEncontrado){
+     res.status(200).json(skuEncontrado);
+    } else {
+      res.status(404).send('sku no encontrado!!!')
+    }
+});
+
 module.exports=router;

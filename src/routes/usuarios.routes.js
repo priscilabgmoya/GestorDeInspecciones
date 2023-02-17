@@ -43,6 +43,7 @@ router.post("/gestionarUsuario/altaUsuario", async (req, res) => {
     res.status(500).send("Falló al agregar Nuevo Usuario!!!");
   }
 });
+
 router.put("/gestionarUsuario/bajaLogicaUsuario", async (req, res) => {
   if (!req.body.dni) {
     res.status(400).send("DNI es requerido!");
