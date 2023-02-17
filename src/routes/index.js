@@ -4,5 +4,6 @@ module.exports = {
   rutasGestionColor: require("./color.routes"),
   rutasOrdenProduccion: require("./ordenProduccion.routes"),
   rutasNroLinea: require("./nroLinea.routes"),
-  rutasTurno: require("./turno.routes")
+  rutasTurno: require("./turno.routes"),
+  rutasJornadaLaboral : require('./jornadaLaboral.routes')
 };

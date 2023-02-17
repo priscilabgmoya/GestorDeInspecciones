@@ -20,6 +20,15 @@ router.post("/jornadaLaboral/agregarJornada",async(req,res)=>{
       }
 });
 router.get("/buscarJornadaLaboral/:dni_empleado",async(req,res)=>{
-
+  if(! req.params.dni_empleado){
+    res.status(400).send("DNI empleado es requerido!");
+    return;
+  }
+  const id_jornada_laboral = await db.JornadaLaboral.idJornadaLaboral(req.params.dni_empleado) ;
+  if(id_jornada_laboral){
+    res.status(200).json(id_jornada_laboral);
+  }else{
+    res.status(404).send("Jornada Laboral no encontrada!");
+  }
 });
 module.exports=router;

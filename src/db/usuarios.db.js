@@ -23,7 +23,7 @@ module.exports.getUsuarioRegistrado = async function (dni) {
   let conn;
   try {
     conn = await getConnection();
-    const SQL = `SELECT 	contraseña, t.descripcion as 'tipo_empleado' FROM ${tablaEmpleado} e  JOIN ${tablaTipoEmpleado} t
+    const SQL = `SELECT  dni, contraseña, t.descripcion as 'tipo_empleado' FROM ${tablaEmpleado} e  JOIN ${tablaTipoEmpleado} t
        ON e.id_tipo_empleado = t.id_tipo_empleado WHERE  dni  = ?`;
     const row = await conn.query(SQL, [dni]);
     return row;

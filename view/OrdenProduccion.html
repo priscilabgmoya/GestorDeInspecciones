@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="./css/index.css">
     <title>Gestor de inspeccion</title>
    
@@ -63,20 +63,19 @@
       <br>
           <!--ver autocompletado y agrandar los combos -->
           <article class="row d-flex justify-content-around">
-                          <aside class="col-xl-5"><a>Nro. Orden de Produccion: </a><input  type="number" id="inputNroOrdenProduccion" style="width: 45%;" required></aside>
-
-                            <aside class="col-xl-5  py-2"> <a>Nro. de Linea:   </a><select name="select" style="width: 75%;"  id="nroLinea" required>
-                              <option value="-">Seleccionar Nro. de Linea</option>
-                            </select> </aside>
-
-                            
-                            <aside class="col-xl-5  py-2"><a>Modelo:  </a><select name="select" style="width: 75%;" id="tipoModelo" required>
-                              <option value="-">Seleccionar Modelo </option>
-                            </select></aside>
-         
-                            <aside class="col-xl-5 py-2"><a>Color:  </a><select name="select" style="width: 75%;"  id="tipoColor" required>
-                              <option value="-">Seleccionar Color</option>
-                            </select> </aside>
+                          <aside class="col-xl-5"><a>Nro. Orden de Produccion: </a><input  type="number" id="inputNroOrdenProduccion" style="width: 45%;" required disabled></aside>
+                            <aside class="col-xl-5  py-2"> <a>Nro. de Linea:   </a><input type="number" list="listadoNroLinea"  style="width: 75%;"  id="inputNroLinea" required disabled>
+                              <datalist id="listadoNroLinea">
+                              </datalist> 
+                             </aside>
+                            <aside class="col-xl-5  py-2"><a>Modelo:  </a><input type="text" list="listadoModelo" style="width: 75%;" id="inputModelo" required disabled>
+                              <datalist id="listadoModelo">
+                              </datalist> 
+                            </aside>
+                            <aside class="col-xl-5 py-2"><a>Color:  </a><input type="text" list="listadoColor" style="width: 75%;"  id="inputColor" required disabled>
+                              <datalist id="listadoColor">
+                              </datalist> 
+                           </aside>
           </article>
           <br>          
             <article class="d-flex justify-content-between py-4">
@@ -90,6 +89,8 @@
     </section>
 
 </main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
   <script src="../controller/ControladorOrdenProduccion.js"></script>
     

@@ -2,13 +2,13 @@
  * varaibles que se usan en el documento
  */
 const bodyModelo = document.getElementById("bodyTablaColor");
-const activo = 1;
-const inactivo = 0;
+const disponible = 1;
+
 
 /**
  * Listamos los modelos desde la DB
  */
-fetch(`http://localhost:3308/gestionarColor/${activo}`)
+fetch(`http://localhost:3308/coloresListado`)
   .then((res) => res.json())
   .then((data) => mostrarColor(data))
   .catch((error) => console.log(error));
@@ -63,12 +63,11 @@ function eliminarColor(tbody, boton) {
 
     $("#ventanaEliminarColorModal").modal("show");
     let colorEliminado = {
-      id_color: idColor,
-      registro: inactivo,
+      id_color: idColor
     };
     $("#btnEliminarColorModal").on("click", function () {
-      fetch(`http://localhost:3308/gestionarColor/bajaLogicaColor`, {
-        method: "PUT",
+      fetch(`http://localhost:3308/gestionarColor/eliminarColor`, {
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(colorEliminado),
       }).catch((error) => console.log(error));
@@ -116,12 +115,12 @@ function modificarColor(tbody, boton) {
  */
 function CrearColor() {
   let idColor = parseInt($("#inputIdModal").val()),
-    descripcionColor = $("#inputDenominaciónModal").val();
+    descripcionColor = $("#inputDescripcionModal").val();
 
   let nuevoColor = {
     id_color: idColor,
     descripcion: descripcionColor,
-    registro: activo,
+    registro: disponible,
   };
   console.log(nuevoColor);
 

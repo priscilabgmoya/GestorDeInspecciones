@@ -2,13 +2,10 @@
  * varaibles que se usan en el documento
  */
 const bodyModelo = document.getElementById("bodyTablaModelo");
-const activo = 1;
-const inactivo = 0;
-
 /**
  * Listamos los modelos desde la DB
  */
-fetch(`http://localhost:3308/gestionarModelo/${activo}`)
+fetch(`http://localhost:3308/gestionarModelo/listado`)
   .then((res) => res.json())
   .then((data) => mostrarModelo(data))
   .catch((error) => console.log(error));
@@ -22,7 +19,7 @@ const mostrarModelo = (data) => {
     fila.appendChild(columna);
 
     columna = document.createElement("td");
-    columna.innerText = modelo.descripcion;
+    columna.innerText = modelo.denominacion;
     fila.appendChild(columna);
 
     columna = document.createElement("td");
@@ -91,7 +88,7 @@ function modificarModelo(tbody, boton) {
 
     let modeloModificado = {
       sku: $("#inputSku").val(),
-      descripcion: "",
+      denominacion: "",
       limite_superior_observado: 0,
       limite_inferior_observado: 0,
       limite_superior_reproceso: 0,
@@ -99,7 +96,7 @@ function modificarModelo(tbody, boton) {
     };
 
     $("#inputDenominacion").change(function () {
-      modeloModificado.descripcion = $("#inputDenominacion").val();
+      modeloModificado.denominacion = $("#inputDenominacion").val();
     });
     $("#inputLimiteSuperiorObservado").change(function () {
       modeloModificado.limite_superior_observado = parseInt(
@@ -122,8 +119,8 @@ function modificarModelo(tbody, boton) {
       );
     });
 
-    if (modeloModificado.descripcion === "") {
-      modeloModificado.descripcion = $("#inputDenominacion").val();
+    if (modeloModificado.denominacion === "") {
+      modeloModificado.denominacion = $("#inputDenominacion").val();
     }
     if (modeloModificado.limite_superior_observado === 0) {
       modeloModificado.limite_superior_observado = parseInt(
@@ -165,12 +162,11 @@ function eliminarModelo(tbody, boton) {
    
     $("#ventanaEliminarModeloModal").modal("show");
     let modeloEliminado = {
-      sku: sku,
-      registro: inactivo,
+      sku: sku
     };
     $("#btnEliminarModeloModal").on("click", function () {
-      fetch(`http://localhost:3308/gestionarModelo/bajaLogicaModelo`, {
-        method: "PUT",
+      fetch(`http://localhost:3308/gestionarModelo/eliminarModelo`, {
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(modeloEliminado),
       }).catch((error) => console.log(error));
@@ -201,7 +197,7 @@ function CrearModelo() {
 
   let nuevoModelo = {
     sku: sku,
-    descripcion: denominacion,
+    denominacion: denominacion,
     limite_superior_observado: limiteSupObservado,
     limite_inferior_observado: limiteInfObservado,
     limite_superior_reproceso: limiteSupReproceso,

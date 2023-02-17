@@ -11,4 +11,53 @@ router.get("/buscarOrdenProduccion/:nro_produccion", async (req, res) => {
     res.status(404).send("Orden de Produccion no encontrado!!!");
   }
 });
+router.post("/crearOrdenProduccion", async(req,res)=> {
+  if(!req.body.nro_orden_produccion){
+    res.status(400).send('Nro de Produccion es Requerido!!!')
+    return
+  }
+  
+  if(!req.body.fecha){
+    res.status(400).send('Fecha  es Requerido!!!')
+    return
+  }
+  if(!req.body.id_color){
+    res.status(400).send('ID Color  es Requerido!!!')
+    return
+  }else{
+    const idEncontrado = await db.Color.buscarColorId(req.body.id_color);
+    req.body.id_color = idEncontrado.id_color;
+  }
+  if(!req.body.sku){
+    res.status(400).send('sku es Requerido!!!')
+    return
+  }else{
+    const skuEncontrado = await db.Modelo.buscarModeloSku(req.body.sku);
+    req.body.sku = skuEncontrado.sku;
+  }
+  if(!req.body.linea){
+    res.status(400).send('Nro de Linea   es Requerida!!!')
+    return
+  }else {
+  let  linea = {
+      nro_linea_de_trabajo: req.body.linea,
+      disponibilidad: "no disponible"
+    }
+    const lineaOcupada = await db.NroLinea.cambiarDisponibilidad(linea);
+  }
+  if(!req.body.id_jornada_laboral){
+    res.status(400).send('Dni del Empleado es Requerido!!!')
+    return
+  }else{
+    const idJornadaLaboral = await db.JornadaLaboral.idJornadaLaboral(req.body.id_jornada_laboral) ;
+    req.body.id_jornada_laboral = idJornadaLaboral.id_jornada_laboral;
+  }
+ const agregarOrdenProduccion = await db.OrdenProduccion.agregarOrdenProduccion(req.body); 
+ 
+ if(agregarOrdenProduccion){
+  res.status(201).json(req.body)
+}else{
+  res.status(500).send('Falló al agregar la Orden De Produccion!!!');
+}
+});
 module.exports = router;
