@@ -25,40 +25,10 @@ function iniciarSesion() {
 function validarContraseña(dato) {
   var contraseña = $("#passwordInput").val();
   if (contraseña === dato.contraseña) {
-      crearJornadaLaboral(dato.dni , dato.tipo_empleado);
- 
+      redireccionPantallaDeTrabajo(dato.tipo_empleado);
   } else {
     alert("Error: Contraseña No Valida");
   }
-}
-
-function crearJornadaLaboral(dniUsuario, tipoEmpleado) {
-  fetch(`http://localhost:3308/buscarJornadaLaboral/${dniUsuario}`)
-    .then((res) => verificarJornada(res.status))
-    .catch((error) => console.log(error));
-  const verificarJornada = (estadoDeRespuesta) => {
-    if (estadoDeRespuesta === 200) {
-      alert(
-        "mostramo una ventana modal si desea seguir con la misma jornada o no "
-      );
-      redireccionPantallaDeTrabajo(tipoEmpleado);
-    } else {
-      let nuevaJornadaLaboral = {
-        id_jornada_laboral: parseInt(generateID()),
-        fecha_inicio:
-          "" + date.getFullYear() + "-" + (date.getMonth() +1)+ "-" + date.getDate(),
-        idturno: parseInt(window.localStorage.getItem("idturnoIngreso")),
-        dni_empleado: parseInt(dniUsuario),
-      };
-      console.log(nuevaJornadaLaboral);
-      fetch(`http://localhost:3308/jornadaLaboral/agregarJornada`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nuevaJornadaLaboral),
-      }).catch((error) => console.log(error));
-      redireccionPantallaDeTrabajo(tipoEmpleado);
-    }
-  };
 }
 
 function cargarTurnos() {
@@ -106,7 +76,7 @@ function redireccionPantallaDeTrabajo(tipoEmpleado) {
    *
    */
   if (tipoEmpleado === "supervisor de calidad") {
-    window.location.href = "../view/listadoOrdenProduccion.html";
+    window.location.href = "../view/LineaControl.html";
   }
   /**
    * si es el administrador
@@ -154,12 +124,4 @@ function generatePassword() {
   }
   return pass;
 }
-function generateID() {
-  var pass = "";
-  var str = "0123456789";
-  for (let i = 1; i <= 6; i++) {
-    var char = Math.floor(Math.random() * str.length + 1);
-    pass += str.charAt(char);
-  }
-  return pass;
-}
+
