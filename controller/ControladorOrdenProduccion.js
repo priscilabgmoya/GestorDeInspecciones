@@ -11,6 +11,8 @@ const urlColor = `http://localhost:3308/coloresDescripcion/${disponibles}`;
 var dniUsuario = window.localStorage.getItem("dniUsuario");
 var turnoIngreso = window.localStorage.getItem("turnoIngreso");
 
+let nuevaJornadaLaboral ={}
+
 opcionesLineas(selectorLinea);
 opcionesModelo(urlModelo, selectorModelo);
 opcionesColor(urlColor, selectorColor);
@@ -102,6 +104,11 @@ function opcionesLineas(selector) {
 }
 
 function crearOrdenProduccion() {
+  
+  /**
+   * Creamos la jornada laboral 
+   */
+  crearJornadaLaboral();
   /**
    * Creamos el objeto orden de produccion
    */
@@ -118,12 +125,12 @@ function crearOrdenProduccion() {
     estado: activa,
     linea: parseInt($("#inputNroLinea").val()),
     sku:$("#inputModelo").val(),
-    id_jornada_laboral: dniUsuario ,
+    id_jornada_laboral: parseInt( nuevaJornadaLaboral.id_jornada_laboral)
   };
-
 /**
  * Guardamos la orden de produccion en el DB
  */
+
 
 fetch(`http://localhost:3308/crearOrdenProduccion`, {
         method: "POST",
@@ -132,6 +139,26 @@ fetch(`http://localhost:3308/crearOrdenProduccion`, {
       }).catch((error) => console.log(error));
 
       alert('Orden de Produccion Creada');
-      
-console.log(nuevaOrdenProduccion)
+  
+}
+function crearJornadaLaboral() {
+
+  nuevaJornadaLaboral.id_jornada_laboral = parseInt(generateID())
+  nuevaJornadaLaboral.idturno = parseInt(window.localStorage.getItem("idturnoIngreso"))
+console.log(nuevaJornadaLaboral)
+      fetch(`http://localhost:3308/jornadaLaboral/agregarJornada`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(nuevaJornadaLaboral),
+      }).catch((error) => console.log(error));
+    
+}
+function generateID() {
+  var pass = "";
+  var str = "0123456789";
+  for (let i = 1; i <= 6; i++) {
+    var char = Math.floor(Math.random() * str.length + 1);
+    pass += str.charAt(char);
+  }
+  return pass;
 }

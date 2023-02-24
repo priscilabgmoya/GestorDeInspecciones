@@ -151,3 +151,15 @@ module.exports.modificarUsuario= async function(usuarioModificado){
   }
 
 }
+module.exports.getDniTipoEmpleado= async function (tipo_empleado) {
+  let conn;
+  try {
+    conn = await getConnection();
+    const row = await conn.query(`SELECT dni,  nombre, apellido FROM ${tablaEmpleado} WHERE id_tipo_empleado= ?`, [
+      tipo_empleado,
+    ]);
+    return row;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};

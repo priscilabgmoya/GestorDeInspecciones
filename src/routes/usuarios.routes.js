@@ -113,5 +113,12 @@ router.get("/nombreApellidoUsuario/:dni", async(req,res)=>{
     res.status(404).send("No se encontro nombre y apellido del DNI ingresado! ");
   }
 });
-
+router.get("/nombreApellidoTipoEmpleado/:supervisorCalidad", async (req,res)=>{
+  const dniTipoEmpleado = await db.Usuario.getDniTipoEmpleado(req.params.supervisorCalidad);
+  if (dniTipoEmpleado) {
+    res.status(200).json(dniTipoEmpleado);
+  } else {
+    res.status(404).send("No se encontro Tipo de Empleado  ingresado! ");
+  }
+})
 module.exports = router;

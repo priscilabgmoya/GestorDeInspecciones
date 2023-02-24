@@ -11,6 +11,7 @@ router.get("/buscarOrdenProduccion/:nro_produccion", async (req, res) => {
     res.status(404).send("Orden de Produccion no encontrado!!!");
   }
 });
+
 router.post("/crearOrdenProduccion", async(req,res)=> {
   if(!req.body.nro_orden_produccion){
     res.status(400).send('Nro de Produccion es Requerido!!!')
@@ -48,9 +49,6 @@ router.post("/crearOrdenProduccion", async(req,res)=> {
   if(!req.body.id_jornada_laboral){
     res.status(400).send('Dni del Empleado es Requerido!!!')
     return
-  }else{
-    const idJornadaLaboral = await db.JornadaLaboral.idJornadaLaboral(req.body.id_jornada_laboral) ;
-    req.body.id_jornada_laboral = idJornadaLaboral.id_jornada_laboral;
   }
  const agregarOrdenProduccion = await db.OrdenProduccion.agregarOrdenProduccion(req.body); 
  
@@ -59,5 +57,25 @@ router.post("/crearOrdenProduccion", async(req,res)=> {
 }else{
   res.status(500).send('Falló al agregar la Orden De Produccion!!!');
 }
+});
+router.get('/ordenDeProduccion/listadoOrdenCreada',async(req,res)=>{
+  const listadoOrdenProduccion = await db.OrdenProduccion.getOrdenProduccionCreada();
+  res.status(200).json(listadoOrdenProduccion);
+});
+router.put('/cambiarEstadoOrdenProduccion' ,async(req,res)=>{
+  if(!req.body.nroOrden){
+    res.status(400).send('SKU es Requerido!!!')
+    return
+  }
+  if(!req.body.estado){
+    res.status(400).send('Estado es Requerido!!!')
+    return
+  }
+  const isUpdateOk = await db.OrdenProduccion.cambiarDisponibilidad(req.body)
+  if(isUpdateOk){
+      res.status(200).json(isUpdateOk)
+  }else{
+      res.status(500).send('Falló al modificar la Orden De Produccion!!!')
+  }
 });
 module.exports = router;

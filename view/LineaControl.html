@@ -16,19 +16,13 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarCollapse">
           <ul class="navbar-nav me-auto mb-2 mb-md-0">
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" href="./OrdenProduccion.html">Crear Orden Produccion</a>
-            </li>
             <li class="nav-item">
               <a class="nav-link" href="./LineaControl.html">Linea de Control</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./Semaforo.html">Semaforo</a>
-            </li>
           </ul>
-          <form class="d-flex">
+          <form class=" ">
             <a class="btn btn-outline-success"  href="../Index.html">Salir</a>
           </form>
         </div>
@@ -36,7 +30,7 @@
     </nav>
   </header>
   <main>
-    <div class="container-fluid d-flex  justify-content-center my-5 py-5">
+    <div class="container-fluid d-flex  justify-content-center my-5" id="lineaControl">
       <div id="LineaDeControl" class="row p-5 border border-dark m-2">
           <div class="p-2 text-center">
               <h1 id="titulo">Linea de control</h1>
@@ -187,13 +181,6 @@
           </div>
         </div>
 
-        <div class="row ">
-            <div class="col d-flex justify-content-end m-2" >
-              <button class="btn btn-outline-primary btn-sm btnGuardar" type="submit">Pausar</button>
-              <button class="btn btn-outline-primary btn-sm btnGuardar" type="submit">Reanudar</button>
-              <button class="btn btn-outline-primary btn-sm btnGuardar" type="submit">Finalizar</button>
-            </div>
-        </div>
       </div>
   </article>
   </main>

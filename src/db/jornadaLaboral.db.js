@@ -9,12 +9,10 @@ module.exports.agregarJornadaLaboral = async function (jornadaLaboral){
     let conn; 
     try {
         conn = await getConnection();
-        const SQL = `INSERT INTO ${tablaJornadaLaboral} (id_jornada_laboral, fecha_inicio, idturno, dni_empleado) VALUES( ?, ? , ? , ? )`;
+        const SQL = `INSERT INTO ${tablaJornadaLaboral} (id_jornada_laboral, idturno) VALUES( ?, ? )`;
         const params =[];
         params[0] =jornadaLaboral.id_jornada_laboral;
-        params[1] =jornadaLaboral.fecha_inicio;
-        params[2] =jornadaLaboral.idturno;
-        params[3] =jornadaLaboral.dni_empleado;
+        params[1] =jornadaLaboral.idturno;
         const rows = await conn.query(SQL,params);
         return rows;
     } catch (err) {
