@@ -5,5 +5,8 @@ module.exports = {
   rutasOrdenProduccion: require("./ordenProduccion.routes"),
   rutasNroLinea: require("./nroLinea.routes"),
   rutasTurno: require("./turno.routes"),
-  rutasJornadaLaboral : require('./jornadaLaboral.routes')
+  rutasJornadaLaboral : require('./jornadaLaboral.routes'),
+  rutasIncidencia: require('./incidencia.routes'),
+  rutasDefecto: require('./defecto.routes'),
+  rutasPie: require('./pie.routes')
 };

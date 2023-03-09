@@ -20,4 +20,12 @@ router.get("/turnosDisponibles", async (req, res) => {
       res.status(404).send('turno no encontrado!!!')
     }
   });
+  router.get("/horarioTurno/:id_turno", async(req,res) =>{
+    const horarioTurno = await db.Turno.getHorarioTurno(req.params.id_turno);
+    if(horarioTurno){
+        res.status(200).json(horarioTurno);
+    } else {
+      res.status(404).send('turno no encontrado!!!')
+    }
+  });
 module.exports=router;

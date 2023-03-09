@@ -62,31 +62,6 @@ function cargarTurnos() {
     window.localStorage.setItem("idturnoIngreso", id_turno);
   };
 }
-
-function redireccionPantallaDeTrabajo(tipoEmpleado) {
-  /**
-   * si es supervisor de linea
-   */
-  if (tipoEmpleado === "supervisor de linea") {
-    window.location.href = "../view/OrdenProduccion.html";
-    window.localStorage.setItem("dniUsuario", $("#usuarioInput").val());
-  }
-  /**
-   * si es supervisor de calidad
-   *
-   */
-  if (tipoEmpleado === "supervisor de calidad") {
-    window.location.href = "../view/LineaControl.html";
-  }
-  /**
-   * si es el administrador
-   *
-   */
-  if (tipoEmpleado === "administrativo") {
-    window.location.href = "../view/GestionarUsuario.html";
-  }
-}
-
 $("#btnGuardarUsuarioModal").on("click", function () {
   CrearUsuario();
 });
@@ -113,6 +88,29 @@ function CrearUsuario() {
   }).catch((error) => console.log(error));
   alert("Usuario Creado!!");
   location.reload();
+}
+function redireccionPantallaDeTrabajo(tipoEmpleado) {
+  /**
+   * si es supervisor de linea
+   */
+  if (tipoEmpleado === "supervisor de linea") {
+    window.location.href = "../view/OrdenProduccion.html";
+    window.localStorage.setItem("dniUsuario", $("#usuarioInput").val());
+  }
+  /**
+   * si es supervisor de calidad
+   *
+   */
+  if (tipoEmpleado === "supervisor de calidad") {
+    window.location.href = "../view/LineaControl.html";
+  }
+  /**
+   * si es el administrador
+   *
+   */
+  if (tipoEmpleado === "administrativo") {
+    window.location.href = "../view/GestionarUsuario.html";
+  }
 }
 function generatePassword() {
   var pass = "";

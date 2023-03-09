@@ -32,4 +32,7 @@ app.use(route.rutasNroLinea);
 app.use(route.rutasTurno);
 app.use(route.rutasOrdenProduccion);
 app.use(route.rutasJornadaLaboral);
+app.use(route.rutasDefecto);
+app.use(route.rutasIncidencia);
+app.use(route.rutasPie);
 export default app; 

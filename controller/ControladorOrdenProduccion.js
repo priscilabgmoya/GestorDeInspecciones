@@ -1,39 +1,29 @@
-const disponibles = 1;
 const disponibilidad = "disponible";
 const activa = 0;
+const en_proceso = 3;
+const pausada = 1; 
+const finalizada = 2; 
 const selectorLinea = document.getElementById("listadoNroLinea");
 const selectorModelo = document.getElementById("listadoModelo");
 const selectorColor = document.getElementById("listadoColor");
 const date = new Date();
-const urlModelo = `http://localhost:3308/modeloDenominacion/${disponibles}`;
-const urlColor = `http://localhost:3308/coloresDescripcion/${disponibles}`;
+
 
 var dniUsuario = window.localStorage.getItem("dniUsuario");
 var turnoIngreso = window.localStorage.getItem("turnoIngreso");
 
-let nuevaJornadaLaboral ={}
 
 opcionesLineas(selectorLinea);
-opcionesModelo(urlModelo, selectorModelo);
-opcionesColor(urlColor, selectorColor);
+opcionesModelo(selectorModelo);
+opcionesColor(selectorColor);
 
-habilitarBotones(turnoIngreso);
+
 cargarDatosEmpleados();
 
 $("#btnCrearOrdenProduccion").on("click", function () {
-  nro_orden_produccion = $("#inputNroOrdenProduccion").val();
-  fetch(`http://localhost:3308/buscarOrdenProduccion/${nro_orden_produccion}`)
-    .then((res) => verificarNroOrdenProduccion(res.status))
-    .catch((error) => console.log(error));
+  crearOrdenProduccion();
 });
-function verificarNroOrdenProduccion(estadoDeRespuesta) {
-  if (estadoDeRespuesta === 200) {
-    alert("Error: Ya existe Nro de Orden de Produccion");
-    location.reload();
-  } else {
-    crearOrdenProduccion();
-  }
-}
+
 function cargarDatosEmpleados() {
   fetch(`http://localhost:3308/nombreApellidoUsuario/${dniUsuario}`)
     .then((res) => res.json())
@@ -41,12 +31,13 @@ function cargarDatosEmpleados() {
     .catch((error) => console.log(error));
   const cargarNombre = (data) => {
     $("#inputSupervisorLinea").val(` ${data.nombre} ${data.apellido}`);
+    habilitarBotones(turnoIngreso);
   };
 }
 function habilitarBotones(turno) {
-  $("#inputTurno").val(turno);
-
+  
   if (turno === "mañana" || turno === "tarde") {
+    $("#inputTurno").val(turno);
     $("#btnCrearOrdenProduccion").prop("disabled", false);
     $("#inputNroOrdenProduccion").prop("disabled", false);
     $("#inputNroLinea").prop("disabled", false);
@@ -59,8 +50,8 @@ function habilitarBotones(turno) {
   }
 }
 
-function opcionesColor(url, selector) {
-  fetch(`${url}`)
+function opcionesColor(selector) {
+  fetch(`http://localhost:3308/coloresDescripcion`)
     .then((res) => res.json())
     .then((data) => mostrarOpciones(data))
     .catch((error) => console.log(error));
@@ -73,8 +64,8 @@ function opcionesColor(url, selector) {
     }
   };
 }
-function opcionesModelo(url, selector) {
-  fetch(`${url}`)
+function opcionesModelo(selector) {
+  fetch(`http://localhost:3308/modeloDenominacion`)
     .then((res) => res.json())
     .then((data) => mostrarOpciones(data))
     .catch((error) => console.log(error));
@@ -106,10 +97,6 @@ function opcionesLineas(selector) {
 function crearOrdenProduccion() {
   
   /**
-   * Creamos la jornada laboral 
-   */
-  crearJornadaLaboral();
-  /**
    * Creamos el objeto orden de produccion
    */
   let nuevaOrdenProduccion = {
@@ -125,34 +112,20 @@ function crearOrdenProduccion() {
     estado: activa,
     linea: parseInt($("#inputNroLinea").val()),
     sku:$("#inputModelo").val(),
-    id_jornada_laboral: parseInt( nuevaJornadaLaboral.id_jornada_laboral)
+
   };
 /**
  * Guardamos la orden de produccion en el DB
  */
-
-
 fetch(`http://localhost:3308/crearOrdenProduccion`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevaOrdenProduccion),
       }).catch((error) => console.log(error));
-
       alert('Orden de Produccion Creada');
   
 }
-function crearJornadaLaboral() {
 
-  nuevaJornadaLaboral.id_jornada_laboral = parseInt(generateID())
-  nuevaJornadaLaboral.idturno = parseInt(window.localStorage.getItem("idturnoIngreso"))
-console.log(nuevaJornadaLaboral)
-      fetch(`http://localhost:3308/jornadaLaboral/agregarJornada`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nuevaJornadaLaboral),
-      }).catch((error) => console.log(error));
-    
-}
 function generateID() {
   var pass = "";
   var str = "0123456789";
@@ -161,4 +134,33 @@ function generateID() {
     pass += str.charAt(char);
   }
   return pass;
+}
+
+$('#btnPausarOrdenProduccion').on('click', function(){
+  cambiarEstadoOrdenProduccion(pausada)
+});
+
+$('#btnContinuarOrdenProduccion').on('click', function(){
+  cambiarEstadoOrdenProduccion(en_proceso)
+});
+$('#btnFInalizarOrdenProduccion').on('click', function(){
+  
+});
+
+$('#btnCancelarOrdenProduccion').on('click', function(){
+  window.location.reload()
+});
+
+function cambiarEstadoOrdenProduccion(estado){
+  var  nro_orden = parseInt($("#inputNroOrdenProduccion").val());
+  var cambiarEstado = {
+        nroOrden: nro_orden,
+        estado: estado
+  }
+  fetch(`http://localhost:3308/cambiarEstadoOrdenProduccion`, {
+   method: "PUT",
+   headers: { "Content-Type": "application/json" },
+   body: JSON.stringify(cambiarEstado),
+ }).catch((error) => console.log(error));
+location.reload();
 }

@@ -1,19 +1,13 @@
 const bodyUsuario = document.getElementById("bodyTablaUsuario");
-const activo = 1;
-const inactivo = 0;
 const tipo_Empleado = document.getElementById("seleccionTipoEmpleado");
-const tipo_Empleado_modal = document.getElementById(
-  "seleccionTipoEmpleadoModal"
-);
-fetch(`http://localhost:3308/gestionarUsuario/${activo}`)
+const tipo_Empleado_modal = document.getElementById("seleccionTipoEmpleadoModal");
+fetch(`http://localhost:3308/gestionarUsuario`)
   .then((res) => res.json())
   .then((data) => mostrarUsuario(data))
   .catch((error) => console.log(error));
 
 TipoEmpleado(tipo_Empleado_modal);
-$().on('click',function(){
 
-})
 $("#btnGuardarUsuarioModal").on("click", function () {
   CrearUsuario();
 });
@@ -122,12 +116,11 @@ function eliminarUsuario(tbody, boton) {
     let dni = parseInt($(this).parents("tr").find("td").eq(0).html());
     $("#ventanaEliminarUsuarioModal").modal("show");
     let usuarioEliminado = {
-      dni: dni,
-      registro: inactivo,
+      dni: dni 
     };
     $("#btnEliminarUsuarioModal").on("click", function () {
       fetch(`http://localhost:3308/gestionarUsuario/bajaLogicaUsuario`, {
-        method: "PUT",
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(usuarioEliminado),
       }).catch((error) => console.log(error));

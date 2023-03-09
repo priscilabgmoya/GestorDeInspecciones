@@ -4,13 +4,13 @@ const tablaTipoEmpleado = "tipo_empleado";
 /**
  * Retornamos todos los usuarios
  */
-module.exports.getUsuarios = async function (activos) {
+module.exports.getUsuarios = async function () {
   let conn;
   try {
     conn = await getConnection();
     const SQL = `SELECT dni, nombre, apellido, correo_electronico,  t.descripcion as 'tipo_empleado' FROM ${tablaEmpleado} e  JOIN ${tablaTipoEmpleado} t
-       ON e.id_tipo_empleado = t.id_tipo_empleado WHERE  registro = ?`;
-    const rows = await conn.query(SQL, [activos]);
+       ON e.id_tipo_empleado = t.id_tipo_empleado`;
+    const rows = await conn.query(SQL);
     return rows;
   } catch (err) {
     return Promise.reject(err);
@@ -114,14 +114,13 @@ module.exports.agregarUsuario = async function (usuario){
  * @param {Object} usuarioEliminado
  * @returns
  */
-module.exports.bajaLogicaUsuario = async function(usuarioEliminado){
+module.exports.eliminarUsuario = async function(usuarioEliminado){
   let conn;
   try {
     conn = await getConnection();
-    const SQL = `UPDATE ${tablaEmpleado}  SET registro = ? WHERE dni=?`;
+    const SQL = `DELETE FROM ${tablaEmpleado} WHERE dni=?`;
     const params =[];
-    params[0] =  usuarioEliminado.registro;
-    params[1] = usuarioEliminado.dni; 
+    params[0] = usuarioEliminado.dni; 
     const row = await conn.query(SQL, params);
     return row;
   } catch (err) {

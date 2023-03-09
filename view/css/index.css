@@ -43,14 +43,14 @@ main{
   padding-top: 541px;
 }
 #lineaControl {
-  padding-top: 1112px;
+  padding-top: 397px;
 }
 
 #semaforo{
   padding-top: 367px;
 }
 #OrdenProduccion{
-  padding-top: 306px;
+  padding-top: 357px;
 }
 #logoSiz{
   width: 54%;
@@ -59,7 +59,7 @@ main{
 #tablaOperaciones {
   display: flex;
   justify-content: center;
-  padding-top: 344px;
+  padding-top: 15px;
 }
 #tablaOperaciones .card {
   width: 54%;
