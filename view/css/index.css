@@ -28,17 +28,22 @@ main{
   z-index: 2;
 }
 
-.form-signin input[type="email"] {
+.form-signin input[type="number"] {
   margin-bottom: 14px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
+
 }
 
 .form-signin input[type="password"] {
   margin-bottom: 14px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+
 }
+
+
+
 #GestionColor{
   padding-top: 618px;
 }
