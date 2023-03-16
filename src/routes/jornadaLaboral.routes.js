@@ -3,12 +3,13 @@ const db = require("../db/index");
 const router = Router();
 
 router.post("/jornadaLaboral/agregarJornada",async(req,res)=>{
+  console.log(req.body)
    
     if(! req.body.id_jornada_laboral){
         res.status(400).send("ID es requerido!");
         return;
       }
-      if (!req.body.fecha_inicio) {
+      if (!req.body.idturno) {
         res.status(400).send("Fecha inicio es requerido");
         return;
       }

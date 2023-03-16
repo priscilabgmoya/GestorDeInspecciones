@@ -20,14 +20,14 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="./OrdenProduccion.html">Crear Orden Produccion</a>
+              <li class="nav-item ">
+                <a class="nav-link " aria-current="page" href="./OrdenProduccion.html">Crear Orden Produccion</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="./LineaControl.html">Linea de Control</a>
+                <a class="nav-link" href="./ListadoOrdenProduccion.html">Orden de Produccion Creada</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="./Semaforo.html">Semaforo</a>
+                <a class="nav-link" href="./Semaforo.html">Semaforo de Defectos</a>
               </li>
             </ul>
             <form class="d-flex">
@@ -38,8 +38,8 @@
     </nav>
 </header>
 <main>
-    <section class="container-fluid d-flex  justify-content-center  m"  id="OrdenProduccion">
-     <div  class="row  border border-dark m-5">
+    <section class="container-fluid d-flex  justify-content-center  "  id="OrdenProduccion">
+     <div  class="row  border border-dark mx-1">
            <article class="row -xl-12">
                <p class = " h1 text-center d-flex justify-content-center">Creacion de Orden de Producción</p>
                <p class="h5">Datos de Orden de Produccion: </p>
@@ -61,7 +61,7 @@
             <br>
       <hr>
       <br>
-          <!--ver autocompletado y agrandar los combos -->
+        
           <article class="row d-flex justify-content-around">
                           <aside class="col-xl-5"><a>Nro. Orden de Produccion: </a><input  type="number" id="inputNroOrdenProduccion" style="width: 45%;" required disabled></aside>
                             <aside class="col-xl-5  py-2"> <a>Nro. de Linea:   </a><input type="number" list="listadoNroLinea"  style="width: 75%;"  id="inputNroLinea" required disabled>
@@ -80,7 +80,7 @@
           <br>          
             <article class="d-flex justify-content-between py-4">
                 <br>
-                <button class="btn btn-warning " type="button"" id="btnModificarOrdenProduccion" disabled>MODIFICAR</button>
+               
                 <button class="btn btn-success " type="button"" id="btnCrearOrdenProduccion" disabled >CREAR ORDEN DE PRODUCCIÓN</button>
                 <button class="btn btn-danger" type="button"" id="btnCancelarOrdenProduccion" >CANCELAR </button>
                 <br>

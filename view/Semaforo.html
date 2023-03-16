@@ -10,7 +10,6 @@
 
   <title>Semaforo</title>
 </head>
-
   
 <body>
   <header>
@@ -20,9 +19,20 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarCollapse">
-          <form class="">
-            <a class="btn btn-success"  href="../Index.html">Salir</a>
+        <div class="collapse navbar-collapse " id="navbarCollapse">
+          <ul class="navbar-nav me-auto mb-2 mb-md-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="./OrdenProduccion.html">Crear Orden Produccion</a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="./ListadoOrdenProduccion.html">Orden de Produccion Creada</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./Semaforo.html">Semaforo de Defectos</a>
+            </li>
+          </ul>
+          <form class="d-flex">
+            <a class="btn btn-outline-success"  href="../Index.html">Salir</a>
           </form>
         </div>
       </div>
@@ -77,32 +87,12 @@
                     </div>
                 </aside>
             </aside>
-            <button class="btn btn-outline-info btnCrear mt6" type="submit">Refrescar</button>
+            <button class="btn btn-info btnCrear mt6" type="submit">REINICIAR</button>
           </article>
         </section>
     </main>
 </body>
 
-
-
 </html>
-    <!--<script src="script.js"></script>-->
-
-<!--const $lucesDelCirculo = document.querySelectorAll('.luces-circulo');
-let contadorDeLuz = 0;
-
-const mostrarLuz = () =>{
-    $lucesDelCirculo[contadorDeLuz].className = 'luces-circulo';
-    contadorDeLuz++;
-
-    if(contadorDeLuz > 2) contadorDeLuz = 0;
-
-    const luzActual = $lucesDelCirculo[contadorDeLuz];
-    luzActual.classList.add(luzActual.getAttribute('color'))
-}
-setInterval(mostrarLuz,2000)
 
 
-
-
--->

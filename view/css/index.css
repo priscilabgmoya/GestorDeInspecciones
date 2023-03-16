@@ -1,6 +1,6 @@
 html,
 body {
-  height: 50%;
+  height: 70%;
 }
 
 body {
@@ -45,22 +45,51 @@ main{
 
 
 #GestionColor{
-  padding-top: 618px;
+  padding-top: 541px;
 }
-#tablaColor_filter , #tablaColor_paginate{
-  display: flex;
-  justify-content: flex-end;
+#lineaControl {
+  padding-top: 1112px;
 }
- th{
-  width: 217.844px;
-}
+
 #semaforo{
-  padding-top: 564px;
+  padding-top: 367px;
 }
 #OrdenProduccion{
-  padding-top: 416px;
+  padding-top: 306px;
 }
 #logoSiz{
   width: 54%;
   border-radius: 400px;
+} 
+#tablaOperaciones {
+  display: flex;
+  justify-content: center;
+  padding-top: 344px;
+}
+#tablaOperaciones .card {
+  width: 54%;
+  height: 16vh;
+}
+#tablaOperaciones table{
+  width: 96%;
+  height: 15vh;
+}
+#tablaOperaciones td {
+  padding:  0px 23px;
+  margin: 0px;
+  }
+
+#tablaListadoProduccion{
+  display: flex;
+  justify-content: center;
+}
+@media all and (max-width: 768px){
+  #tablaOperaciones td {
+    padding: 0px 9px;
+    margin: 0px;
+}
+#tablaOperaciones .card {
+  width: 96%;
+  height: 27vh;
+}
 }
