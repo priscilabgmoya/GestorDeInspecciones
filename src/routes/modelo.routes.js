@@ -6,8 +6,8 @@ router.get("/gestionarModelo/listado", async (req, res) => {
   const modelo = await db.Modelo.getModelos();
     res.status(200).json(modelo);
 });
-router.get("/modeloDenominacion/:disponibles", async (req, res) => {
-  const modelo = await db.Modelo.getModelosDenominacion(req.params.disponibles);
+router.get("/modeloDenominacion", async (req, res) => {
+  const modelo = await db.Modelo.getModelosDenominacion();
     res.status(200).json(modelo);
 });
 router.post("/gestionarModelo/altaModelo", async(req, res) => {
@@ -73,20 +73,6 @@ router.get("/gestionarModelo/buscarModelo/:skuModelo", async (req, res) => {
     }
 });
 
-
-router.put("/cambiarDisponibilidadModelo",async (req, res) => {
-   
-  if(!req.body.denominacion){
-    res.status(400).send('Denominacion es Requerido!!!')
-    return
-  }
-  const isUpdateOk = await db.Modelo.ocuparModelo(req.body)
-  if(isUpdateOk){
-      res.status(200).json(isUpdateOk)
-  }else{
-      res.status(500).send('Falló al ocupar el Modelo!!!')
-  }
-});
 
 router.get("/buscarModelo/obtenerSku/:denominacion", async (req, res) => {
   const skuEncontrado = await db.Modelo.buscarModeloSku(req.params.denominacion);

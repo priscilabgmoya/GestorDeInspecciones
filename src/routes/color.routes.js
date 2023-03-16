@@ -12,8 +12,8 @@ router.get("/coloresListado", async (req, res) => {
 /**
  * Ruta que retorna todas las descripciones de los colores en la base de datos
  */
-router.get("/coloresDescripcion/:disponibles", async (req, res) => {
-  const color = await db.Color.getColoresDescripcion(req.params.disponibles);
+router.get("/coloresDescripcion", async (req, res) => {
+  const color = await db.Color.getColoresDescripcion();
   res.status(200).json(color);
 });
 /**
@@ -59,7 +59,7 @@ router.put("/gestionarColor/modificarColor", async (req, res) => {
   }
 });
 /**
- * Ruta que elimina logicamente un color
+ * Ruta que elimina un color
  */
 router.delete("/gestionarColor/eliminarColor", async (req, res) => {
   if (!req.body.id_color) {
@@ -85,29 +85,14 @@ router.get("/gestionarColor/bucarColor/:id_color", async (req,res)=> {
     }
 });
 /**
- * Ruta que modifica la disponibilidad de un color
- */
-router.put("/cambiarDisponibilidadColor", async (req, res) => {
-  if (!req.body.descripcion) {
-    res.status(400).send("Descripcion es requerido!");
-    return;
-  }
-  const isUpdateOk = await db.Color.disponibilidadColor(req.body);
-  if (isUpdateOk) {
-    res.status(200).json(isUpdateOk);
-  } else {
-    res.status(500).send("Falló al ocupar el color !!!");
-  }
-});
-/**
- * Ruta que busca  un color especifico 
+ * Ruta que busca id de un color especifico 
  */
 router.get("/buscarColor/obtenerId/:descripcion", async (req,res)=> {
   const idEncontrado = await db.Color.buscarColorId(req.params.descripcion);
   if(idEncontrado){
       res.status(200).json(idEncontrado);
   } else {
-    res.status(404).send('color  no encontrado!!!')
+    res.status(404).send('ID color  no encontrado!!!')
   }
 });
 module.exports = router;

@@ -26,3 +26,15 @@ module.exports.getIdTurno = async function(descripcion){
        return Promise.reject(err);
     }
 }
+
+module.exports.getHorarioTurno = async function(id_turno){
+    let conn; 
+    try {
+        conn = await getConnection();
+        const SQL =  `SELECT hora_entrada, hora_salida  FROM ${tablaTurno} WHERE id_turno=?`;
+        const rows = await conn.query(SQL,[id_turno]);
+        return rows; 
+    } catch (err) {
+       return Promise.reject(err);
+    }
+}

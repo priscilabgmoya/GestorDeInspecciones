@@ -24,9 +24,6 @@
             <li class="nav-item">
               <a class="nav-link" aria-current="page" href="./OrdenProduccion.html">Crear Orden Produccion</a>
             </li>
-            <li class="nav-item active">
-              <a class="nav-link" href="./ListadoOrdenProduccion.html">Orden de Produccion Creada</a>
-            </li>
             <li class="nav-item">
               <a class="nav-link" href="./Semaforo.html">Semaforo de Defectos</a>
             </li>
@@ -86,10 +83,32 @@
                           <script src="scriptSemaforoObservados.js"></script>                 
                     </div>
                 </aside>
+
             </aside>
+            <div class="row">
+              <div class="col">
+                <article class="card" style="padding: 6px; margin: 6px;">
+                    <h2>Contador de Primera</h2>
+                    <input type=»text» readonly=»readonly» />
+                </article>
+              </div>
+              <div class="col">
+                  <article class="card" style="padding: 6px; margin: 6px;">
+                      <h2>Contador de Observado</h2>
+                      <input type=»text» readonly=»readonly» />
+                  </article>
+              </div>
+              <div class="col">
+                  <article class="card" style="padding: 6px; margin: 6px;">
+                      <h2>Contador de Reprocesos</h2>
+                      <input type=»text» readonly=»readonly» />
+                  </article>
+              </div>
+            </div>
             <button class="btn btn-info btnCrear mt6" type="submit">REINICIAR</button>
           </article>
         </section>
+        
     </main>
 </body>
 

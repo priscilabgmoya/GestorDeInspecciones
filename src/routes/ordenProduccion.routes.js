@@ -1,81 +1,81 @@
 import { Router } from "express";
+const admi = require('../servicio/administradorOrdenProduccion');
+const help = require('../helpers/validacionOrdenProduccion')
 const db = require("../db/index");
 const router = Router();
+/**crear una orden de produccion */
+router.post("/crearOrdenProduccion", async (req, res) => {
 
-router.get("/buscarOrdenProduccion/:nro_produccion", async (req, res) => {
-  const ordenProduccionEncontrada =
-    await db.OrdenProduccion.buscarOrdenProduccion(req.params.nro_produccion);
-  if (ordenProduccionEncontrada) {
-    res.status(200).json(ordenProduccionEncontrada);
-  } else {
-    res.status(404).send("Orden de Produccion no encontrado!!!");
-  }
-});
-
-router.post("/crearOrdenProduccion", async(req,res)=> {
-  if(!req.body.nro_orden_produccion){
-    res.status(400).send('Nro de Produccion es Requerido!!!')
-    return
-  }
-  
-  if(!req.body.fecha){
-    res.status(400).send('Fecha  es Requerido!!!')
-    return
-  }
-  if(!req.body.id_color){
-    res.status(400).send('ID Color  es Requerido!!!')
-    return
-  }else{
-    const idEncontrado = await db.Color.buscarColorId(req.body.id_color);
-    req.body.id_color = idEncontrado.id_color;
-  }
-  if(!req.body.sku){
-    res.status(400).send('sku es Requerido!!!')
-    return
-  }else{
-    const skuEncontrado = await db.Modelo.buscarModeloSku(req.body.sku);
-    req.body.sku = skuEncontrado.sku;
-  }
-  if(!req.body.linea){
-    res.status(400).send('Nro de Linea   es Requerida!!!')
-    return
-  }else {
-  let  linea = {
-      nro_linea_de_trabajo: req.body.linea,
-      disponibilidad: "no disponible"
-    }
-    const lineaOcupada = await db.NroLinea.cambiarDisponibilidad(linea);
-  }
-  if(!req.body.id_jornada_laboral){
-    res.status(400).send('Dni del Empleado es Requerido!!!')
-    return
-  }
- const agregarOrdenProduccion = await db.OrdenProduccion.agregarOrdenProduccion(req.body); 
+ let respuesta = await help.validarInformacionCreacionOP(req.body);
+ if(respuesta){
+  res.status(404).send(respuesta);
+ }
  
- if(agregarOrdenProduccion){
-  res.status(201).json(req.body)
-}else{
-  res.status(500).send('Falló al agregar la Orden De Produccion!!!');
-}
-});
-router.get('/ordenDeProduccion/listadoOrdenCreada',async(req,res)=>{
-  const listadoOrdenProduccion = await db.OrdenProduccion.getOrdenProduccionCreada();
-  res.status(200).json(listadoOrdenProduccion);
-});
-router.put('/cambiarEstadoOrdenProduccion' ,async(req,res)=>{
-  if(!req.body.nroOrden){
-    res.status(400).send('SKU es Requerido!!!')
-    return
+ const ordenCreada = await admi.consultarExistenciaOrden(req.body.nro_orden_produccion)
+  if (ordenCreada) {
+    res.status(400).send("Ya existe la orden de Produccion !!!");
+    return;
   }
-  if(!req.body.estado){
-    res.status(400).send('Estado es Requerido!!!')
-    return
+    const idEncontrado = await admi.buscarIdColor(req.body.id_color);
+    if(!idEncontrado){
+      res.status(404).send("no se encontro color !!!");
+    }
+    req.body.id_color = idEncontrado;
+
+    const skuEncontrado = await admi.buscarskuModelo(req.body.sku);
+    if(!skuEncontrado){
+      res.status(404).send("no se encontro Modelo !!!");
+    }
+    req.body.sku = skuEncontrado;
+
+  const agregarOrdenProduccion = await db.OrdenProduccion.agregarOrdenProduccion(req.body);
+
+  if (agregarOrdenProduccion) {
+    res.status(201).json(req.body);
+  } else {
+    res.status(500).send("Falló al agregar la Orden De Produccion!!!");
   }
-  const isUpdateOk = await db.OrdenProduccion.cambiarDisponibilidad(req.body)
-  if(isUpdateOk){
-      res.status(200).json(isUpdateOk)
-  }else{
-      res.status(500).send('Falló al modificar la Orden De Produccion!!!')
+
+});
+
+
+router.get("/lineaConOrdenActiva", async (req, res) => {
+  const lineaSinSupervisor = await db.OrdenProduccion.getLineaOrdenActivas();
+  if (lineaSinSupervisor) {
+    res.status(200).json(lineaSinSupervisor);
+  } else {
+    res.status(404).send("no se encontro linea sin supervisor !!!");
   }
 });
+
+router.get("/supervisorCalidadAsociadoLinea/:dni", async (req, res) => {
+  if (!req.params.dni) {
+    res.status(400).send("Nro de Linea  es Requerido!!!");
+    return;
+  }
+  const informacionSupervisor =
+    await db.OrdenProduccion.supervisorCalidadAsociado(req.params.dni);
+  if (informacionSupervisor) {
+    res.status(200).json(informacionSupervisor);
+  } else {
+    res.status(404).send("no se encontro supervisor  asociado !!!");
+  }
+});
+
+router.get("/jornadaOrdenAsociadaLinea/:nro_linea", async (req, res) => {
+  if (!req.params.nro_linea) {
+    res.status(400).send("Nro de Linea  es Requerido!!!");
+    return;
+  }
+  const jornada = await db.OrdenProduccion.getJornadayNroOrden(
+    req.params.nro_linea
+  );
+  if (jornada) {
+    res.status(200).json(jornada);
+  } else {
+    res.status(404).send("no se encontro jornada  asociada !!!");
+  }
+});
+ 
+
 module.exports = router;

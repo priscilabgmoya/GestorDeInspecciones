@@ -1,10 +1,19 @@
 import { Router } from "express";
 const db = require("../db/index");
+const help =require("../helpers/validarInicioSesion");
 const router = Router();
 /** http://localhost:3307/gestionar */
 
-router.get("/gestionarUsuario/:activos", async (req, res) => {
-  const usuario = await db.Usuario.getUsuarios(req.params.activos);
+router.get("/usuarioRegistrado/:dni", async (req, res) => {
+  const usuarioRegistrado = await db.Usuario.getUsuarioRegistrado(req.params.dni);
+  if (usuarioRegistrado) {
+    res.status(200).json(usuarioRegistrado);
+  } else {
+    res.status(404).send("El DNI no se encuentra Registrado! ");
+  }
+});
+router.get("/gestionarUsuario", async (req, res) => {
+  const usuario = await db.Usuario.getUsuarios();
   if (usuario) {
     res.status(200).json(usuario);
   } else {
@@ -31,9 +40,7 @@ router.post("/gestionarUsuario/altaUsuario", async (req, res) => {
   if (!req.body.id_tipo_empleado) {
     res.status(400).send("Tipo de Empleado  es requerido");
   } else {
-    const tipo_empleado = await db.Usuario.buscarIdTipoEmpleado(
-      req.body.id_tipo_empleado
-    );
+    const tipo_empleado = await db.Usuario.buscarIdTipoEmpleado(req.body.id_tipo_empleado);
     req.body.id_tipo_empleado = tipo_empleado.id_tipo_empleado;
   }
   const agregarUsuarioNuevo = await db.Usuario.agregarUsuario(req.body);
@@ -44,14 +51,14 @@ router.post("/gestionarUsuario/altaUsuario", async (req, res) => {
   }
 });
 
-router.put("/gestionarUsuario/bajaLogicaUsuario", async (req, res) => {
+router.delete("/gestionarUsuario/eliminarUsuario", async (req, res) => {
   if (!req.body.dni) {
     res.status(400).send("DNI es requerido!");
     return;
   }
-  const isUpdateOk = await db.Usuario.bajaLogicaUsuario(req.body);
-  if (isUpdateOk) {
-    res.status(200).json(isUpdateOk);
+  const isDeleteOk = await db.Usuario.eliminarUsuario(req.body);
+  if (isDeleteOk) {
+    res.status(200).json(isDeleteOk);
   } else {
     res.status(500).send("Falló al eliminar el Usuario!!!");
   }
@@ -72,7 +79,6 @@ router.put("/gestionarUsuario/modificarUsuario", async (req, res) => {
     );
     req.body.id_tipo_empleado = tipo_empleado.id_tipo_empleado;
   }
-  console.log(req.body)
   const isUpdateOk = await db.Usuario.modificarUsuario(req.body);
   if (isUpdateOk) {
     res.status(200).json(isUpdateOk);
@@ -96,14 +102,6 @@ router.get("/usuario/idEmpleado/:descripcion", async (req, res) => {
   res.status(200).json(id_tipo_empleado);
 });
 
-router.get("/usuarioRegistrado/:dni", async (req, res) => {
-  const usuarioRegistrado = await db.Usuario.getUsuarioRegistrado(req.params.dni);
-  if (usuarioRegistrado) {
-    res.status(200).json(usuarioRegistrado);
-  } else {
-    res.status(404).send("El DNI no se encuentra Registrado! ");
-  }
-});
 
 router.get("/nombreApellidoUsuario/:dni", async(req,res)=>{
   const nombreApellidoUsuario = await db.Usuario.getNombreApellido(req.params.dni);

@@ -14,11 +14,11 @@ module.exports.getModelos = async function () {
     return Promise.reject(err);
   }
 };
-module.exports.getModelosDenominacion = async function (disponibles) {
+module.exports.getModelosDenominacion = async function () {
   let conn;
   try {
     conn = await getConnection();
-    const rows = await conn.query(`SELECT denominacion FROM ${tablaModelo} WHERE registro=?`,[disponibles]);
+    const rows = await conn.query(`SELECT denominacion FROM ${tablaModelo} `);
     return rows;
   } catch (err) {
     return Promise.reject(err);

@@ -15,12 +15,12 @@ module.exports.getColores = async function () {
     return Promise.reject(err);
   }
 };
-module.exports.getColoresDescripcion = async function (disponibles) {
+module.exports.getColoresDescripcion = async function () {
   let conn;
   try {
     conn = await getConnection();
     const rows = await conn.query(
-      `SELECT descripcion  FROM ${tablaColor} WHERE registro=?`,[disponibles]
+      `SELECT descripcion  FROM ${tablaColor} `
     );
     return rows;
   } catch (err) {
