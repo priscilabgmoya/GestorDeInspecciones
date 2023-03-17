@@ -16,22 +16,3 @@ module.exports.getNrosLineas = async function (disponibilidad) {
       return Promise.reject(err);
     }
   };
-  /**
- * cambiamos Disponibilidad de Nro de Linea 
- * @param {Object} lineaModificada
- * @returns
- */
-module.exports.cambiarDisponibilidad = async function (lineaModificada) {
-    let conn;
-    try {
-      conn = await getConnection();
-      const SQL = `UPDATE ${tablaNroLinea}  SET disponibilidad = ? WHERE nro_linea_de_trabajo=?`;
-      const params = [];
-      params[0] = lineaModificada.disponibilidad;
-      params[1] = lineaModificada.nro_linea_de_trabajo;
-      const rows= await conn.query(SQL, params);
-      return rows;
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  };

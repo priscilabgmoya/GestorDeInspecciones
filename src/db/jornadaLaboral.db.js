@@ -35,23 +35,3 @@ module.exports.idJornadaLaboral = async function (dniEmpleado){
         }
 };
 
-/**
- * agregamos en una jornada laboral existente los datos de un empleado asociado a la misma 
- * @param {Object} empJornadaLaboral
- */
-module.exports.agregarEmpleadoJornadaLaboral = async function (empJornadaLaboral){
-  let conn; 
-  try {
-      conn = await getConnection();
-      const SQL = ` UPDATE ${tablaJornadaLaboral} SET fecha_inicio= ?, idturno= ?, dni_empleado=? WHERE id_jornada_laboral =?`;
-      const params =[];
-      params[0] =empJornadaLaboral.fecha_inicio;
-      params[1] =empJornadaLaboral.idturno;
-      params[2] =empJornadaLaboral.dni_empleado;
-      params[3] =empJornadaLaboral.id_jornada_laboral;
-      const rows = await conn.query(SQL,params);
-      return rows;
-  } catch (err) {
-      return Promise.reject(err);
-  }
-};

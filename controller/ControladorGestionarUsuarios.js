@@ -90,26 +90,14 @@ function CrearUsuario() {
     correo_electronico: correo,
     id_tipo_empleado: tipoEmpleado,
     contraseña: generatePassword(),
-    registro: activo,
   };
-
-  fetch(`http://localhost:3308/gestionarUsuario/buscarEmpleado/${dni}`)
-    .then((res) => verificarDNi(res.status))
-    .catch((error) => console.log(error));
-  const verificarDNi = (estadoRespuesta) => {
-    if (estadoRespuesta === 200) {
-      alert("Error: Ya existe Usuario.");
-      location.reload();
-    } else {
-      fetch(`http://localhost:3308/gestionarUsuario/altaUsuario`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nuevoUsuario),
-      }).catch((error) => console.log(error));
-      alert("Usuario Creado!!");
-      location.reload();
-    }
-  };
+  fetch(`http://localhost:3308/gestionarUsuario/altaUsuario`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(nuevoUsuario),
+  }).catch((error) => console.log(error));
+  alert("Usuario Creado!!");
+  location.reload();
 }
 function eliminarUsuario(tbody, boton) {
   $(tbody).on("click", boton, function () {

@@ -1,8 +1,9 @@
 import { Router } from "express";
 const db = require("../db/index");
-const help =require("../helpers/validarInicioSesion");
+const help = require("../helpers/validarUsuario");
+const admi = require("../servicio/administradorUsuarios");
 const router = Router();
-/** http://localhost:3307/gestionar */
+/** http://localhost:3308/*/
 
 router.get("/usuarioRegistrado/:dni", async (req, res) => {
   const usuarioRegistrado = await db.Usuario.getUsuarioRegistrado(req.params.dni);
@@ -31,18 +32,22 @@ router.get("/gestionarUsuario/buscarEmpleado/:dni", async (req, res) => {
 });
 
 router.post("/gestionarUsuario/altaUsuario", async (req, res) => {
-  if (!req.body.dni) {
-    res.status(400).send("DNI es requerido");
+  const respuesta = await help.validarInformacionUsuario(req.body); 
+  if(respuesta){
+    res.status(400).send(respuesta);
   }
-  if (!req.body.correo_electronico) {
-    res.status(400).send("Correo Electronico es requerido");
+  const usuarioExistente = await admi.buscarUsuarioExistente(req.body.dni);
+  if (usuarioExistente) {
+    res.status(409).send("Ya existe el usuario !!!");
+    return;
   }
-  if (!req.body.id_tipo_empleado) {
-    res.status(400).send("Tipo de Empleado  es requerido");
-  } else {
-    const tipo_empleado = await db.Usuario.buscarIdTipoEmpleado(req.body.id_tipo_empleado);
-    req.body.id_tipo_empleado = tipo_empleado.id_tipo_empleado;
+
+  const tipo_empleado = await admi.tipoEmpleado(req.body.id_tipo_empleado);
+  if(!tipo_empleado){
+    res.status(404).send("no se encontro tipo Empleado !!!");
   }
+  req.body.id_tipo_empleado = tipo_empleado;
+
   const agregarUsuarioNuevo = await db.Usuario.agregarUsuario(req.body);
   if (agregarUsuarioNuevo) {
     res.status(201).json(req.body);
@@ -63,22 +68,20 @@ router.delete("/gestionarUsuario/eliminarUsuario", async (req, res) => {
     res.status(500).send("Falló al eliminar el Usuario!!!");
   }
 });
+
 router.put("/gestionarUsuario/modificarUsuario", async (req, res) => {
-  if (!req.body.dni) {
-    res.status(400).send("DNI es Requerido!!!");
+  const respuesta = await help.validarInformacionUsuarioModificado(req.body); 
+  if (respuesta) {
+    res.status(400).send(respuesta);
     return;
   }
-  if (!req.body.correo_electronico) {
-    res.status(400).send("Correo Electronico es requerido");
+
+  const tipo_empleado = await admi.tipoEmpleado(req.body.id_tipo_empleado);
+  if(!tipo_empleado){
+    res.status(404).send("no se encontro tipo Empleado !!!");
   }
-  if (!req.body.id_tipo_empleado) {
-    res.status(400).send("Tipo de Empleado  es requerido");
-  } else {
-    const tipo_empleado = await db.Usuario.buscarIdTipoEmpleado(
-      req.body.id_tipo_empleado
-    );
-    req.body.id_tipo_empleado = tipo_empleado.id_tipo_empleado;
-  }
+  req.body.id_tipo_empleado = tipo_empleado;
+  
   const isUpdateOk = await db.Usuario.modificarUsuario(req.body);
   if (isUpdateOk) {
     res.status(200).json(isUpdateOk);
@@ -111,6 +114,7 @@ router.get("/nombreApellidoUsuario/:dni", async(req,res)=>{
     res.status(404).send("No se encontro nombre y apellido del DNI ingresado! ");
   }
 });
+
 router.get("/nombreApellidoTipoEmpleado/:supervisorCalidad", async (req,res)=>{
   const dniTipoEmpleado = await db.Usuario.getDniTipoEmpleado(req.params.supervisorCalidad);
   if (dniTipoEmpleado) {

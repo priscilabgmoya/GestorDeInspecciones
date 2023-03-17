@@ -1,5 +1,6 @@
 import { Router } from "express";
 const db = require("../db/index");
+const admi = require("../servicio/administradorColor");
 const router = Router();
 /** http://localhost:3307/gestionar */
 /**
@@ -28,6 +29,12 @@ router.post("/gestionarColor/altaColor", async (req, res) => {
 
   if (! req.body.descripcion) {
     res.status(400).send("Descripcion es requerido");
+    return;
+  }
+
+  const colorExistente = await admi.buscarColorExistente(req.body.id_color);
+  if (colorExistente) {
+    res.status(409).send("Ya existe el color !!!");
     return;
   }
 
@@ -71,28 +78,6 @@ router.delete("/gestionarColor/eliminarColor", async (req, res) => {
     res.status(200).json(isDeleteOk);
   } else {
     res.status(500).send("Falló al eliminar el color !!!");
-  }
-});
-/**
- * Ruta que busca  un color especifico 
- */
-router.get("/gestionarColor/bucarColor/:id_color", async (req,res)=> {
-    const colorEncontrado = await db.Color.buscarColor(req.params.id_color);
-    if(colorEncontrado){
-        res.status(200).json(colorEncontrado);
-    } else {
-      res.status(404).send('color  no encontrado!!!')
-    }
-});
-/**
- * Ruta que busca id de un color especifico 
- */
-router.get("/buscarColor/obtenerId/:descripcion", async (req,res)=> {
-  const idEncontrado = await db.Color.buscarColorId(req.params.descripcion);
-  if(idEncontrado){
-      res.status(200).json(idEncontrado);
-  } else {
-    res.status(404).send('ID color  no encontrado!!!')
   }
 });
 module.exports = router;

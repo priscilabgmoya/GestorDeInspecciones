@@ -22,9 +22,6 @@
               <a class="nav-link" href="./LineaControl.html">Linea de Control</a>
             </li>
             <li class="nav-item">
-              <button class="btn btn-sm btn-warning me-2 py-2 mx-3" type="button" id="guardarInspeccion">Guardar Inspección</button>
-            </li>
-            <li class="nav-item">
               <button class="btn btn-sm btn-danger me-2 py-2 mx-3" type="button" id="abandonarInspeccion">Abandonar Inspección</button>
             </li>
           </ul>
@@ -36,7 +33,7 @@
     </nav>
   </header>
   <main>
-    <div class="container-fluid d-flex  justify-content-center my-5" id="lineaControl">
+    <div class="container-fluid d-flex  justify-content-center my-4" id="lineaControl">
       <div id="LineaDeControl" class="py-3 px-2">
           <div class="row p-2 text-center">
               <h1 id="titulo">Inspección de Zapatos</h1>
@@ -50,12 +47,11 @@
               <div class="col-xl-2  p-2"><a ><b>Estado:</b> </a><label   id="estado"  style="width: 50%;"></label></div>
             </div>
             <hr>
-            <div class="row">
-              <div class="btn-toolbar mb-3 px-5 d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
-                <div class="btn-group me-2" role="group" aria-label="First group" id="btnGrupoHoras">
-                  
-                </div>
-            </div>
+            <div class="row ">
+              <h4>Hora de Incidencia </h4>
+              <fieldset id="grupoBtnIncidencia" class="d-flex justify-content-center">
+          
+            </fieldset>
             <hr>
             <div class="row d-flex justify-content-center">
               <table  style=" width: 60%;"  id="tablaParesPrimera">

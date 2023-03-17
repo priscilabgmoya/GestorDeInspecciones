@@ -14,6 +14,9 @@ module.exports.getModelos = async function () {
     return Promise.reject(err);
   }
 };
+/** Retornamos la denominacion de todos los  modelos
+ *
+ */
 module.exports.getModelosDenominacion = async function () {
   let conn;
   try {
@@ -30,11 +33,12 @@ module.exports.getModelosDenominacion = async function () {
  * @param {Object} modelo
  * @returns 
  */
+/***ver registro */
 module.exports.agregarModelo = async function(modelo){
   let conn;
   try {
     conn = await getConnection();
-    const SQL=`INSERT INTO ${tablaModelo} (sku, denominacion, limite_superior_observado, limite_inferior_observado, limite_superior_reproceso, limite_inferior_reproceso, registro) VALUES(?, ? , ? , ? , ? , ? , ?)`;
+    const SQL=`INSERT INTO ${tablaModelo} (sku, denominacion, limite_superior_observado, limite_inferior_observado, limite_superior_reproceso, limite_inferior_reproceso) VALUES(?, ? , ? , ? , ? , ? )`;
     const params=[]
     params[0]=modelo.sku
     params[1]=modelo.denominacion
@@ -42,7 +46,6 @@ module.exports.agregarModelo = async function(modelo){
     params[3]=modelo.limite_inferior_observado
     params[4]=modelo.limite_superior_reproceso
     params[5]=modelo.limite_inferior_reproceso
-    params[6]=modelo.registro
     const rows = await conn.query(SQL,params);
     return rows;
   } catch (err) {
@@ -52,7 +55,7 @@ module.exports.agregarModelo = async function(modelo){
 }
 
 /**
- * buscamos un modelo especifico 
+ * buscamos un modelo especifico por SKU
  */
 module.exports.buscarModelo = async function(sku){
   let conn;
@@ -65,7 +68,7 @@ module.exports.buscarModelo = async function(sku){
   }
 }
 /**
- * Damos de baja loqicamente un modelo
+ * Damos de baja  un modelo
  * @param {Object} modelo
  * @returns
  */
@@ -107,26 +110,7 @@ module.exports.modificarModelo = async function(modelo){
 }
 
 /**
- * Damos de baja loqicamente un modelo
- * @param {Object} modelo
- * @returns
- */
-module.exports.ocuparModelo = async function (modelo){
-  let conn;
-  try{
-    conn = await getConnection();
-    const SQL = `UPDATE ${tablaModelo}  SET registro = ? WHERE denominacion=?`;
-    const params=[]
-    params[0]=modelo.registro
-    params[1]=modelo.denominacion
-    const row = await conn.query(SQL,params);
-    return row;
-  }catch(err){
-    return Promise.reject(err);
-  }
-}
-/**
- * buscamos sku de un modelo especifico 
+ * buscamos sku de un modelo especifico por denominacion 
  */
 module.exports.buscarModeloSku = async function(denominacion){
   let conn;

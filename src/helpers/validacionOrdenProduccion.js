@@ -1,5 +1,8 @@
 
-module.exports.validarInformacionCreacionOP = function (ordenDeProduccion) {
+/***
+ * valida las propiedades de los objetos
+ */
+module.exports.validarInformacionCreacionOP =  async function (ordenDeProduccion) {
   if (!ordenDeProduccion.nro_orden_produccion) {
     return "Nro de Produccion es Requerido!!!";
   }

@@ -44,6 +44,7 @@ module.exports.buscarUsuario = async function (dni) {
     return Promise.reject(err);
   }
 };
+
 module.exports.getNombreApellido = async function (dni) {
   let conn;
   try {
@@ -93,7 +94,7 @@ module.exports.agregarUsuario = async function (usuario){
   let conn; 
   try {
     conn = await getConnection();
-    const SQL = `INSERT INTO ${tablaEmpleado} (dni, nombre, apellido, correo_electronico, contraseña,id_tipo_empleado, registro) VALUES(?, ? , ? , ? , ? , ?, ? )`;
+    const SQL = `INSERT INTO ${tablaEmpleado} (dni, nombre, apellido, correo_electronico, contraseña,id_tipo_empleado) VALUES(?, ? , ? , ? , ? , ?)`;
     const params =[];
     params[0] = usuario.dni;
     params[1] = usuario.nombre;
@@ -101,7 +102,6 @@ module.exports.agregarUsuario = async function (usuario){
     params[3] = usuario.correo_electronico;
     params[4] = usuario.contraseña;
     params[5] = usuario.id_tipo_empleado;
-    params[6] = usuario.registro;
     const rows = await conn.query(SQL,params);
     return rows;
   } catch (err) {
@@ -110,7 +110,7 @@ module.exports.agregarUsuario = async function (usuario){
 }
 
 /**
- * Eliminamos Logicamente un Usuario
+ * Eliminamos  un Usuario
  * @param {Object} usuarioEliminado
  * @returns
  */

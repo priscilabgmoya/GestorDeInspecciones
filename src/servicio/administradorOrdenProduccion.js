@@ -1,12 +1,5 @@
 const db = require("../db/index");
-/**
- * aca va la consultas , verificaciones
- * cambiar grilla
-ponerlo sobre el mismo, con los botones de la ventana anterior 
-separar los defectos 
 
- * 
- */
 module.exports.consultarExistenciaOrden = async function (nro_produccion) {
   const ordenProduccionEncontrada =
     await db.OrdenProduccion.buscarOrdenProduccion(nro_produccion);
@@ -33,12 +26,3 @@ module.exports.buscarskuModelo = async function (descripcionModelo) {
   }
 };
 
-
-module.exports.CrearJornada = async function (id_jornada_laboral) {
-  const agregarJornada = await db.JornadaLaboral.agregarJornadaLaboral(id_jornada_laboral);
-  if (agregarJornada) {
-    return agregarJornada;
-  } else {
-    return null;
-  }
-};

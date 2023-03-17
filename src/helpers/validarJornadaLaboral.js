@@ -1,4 +1,4 @@
-module.exports.validarInformacionJornadaLaboral = function(jornadaLaboral){
+module.exports.validarInformacionJornadaLaboral = async function(jornadaLaboral){
     if(! jornadaLaboral.id_jornada_laboral){
         return "ID Jornada Laboral  es requerido!";
       }
