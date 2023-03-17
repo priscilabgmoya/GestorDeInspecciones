@@ -1,7 +1,8 @@
 /**
- * varaibles que se usan en el documento
+ * variables que se usan en el documento
  */
-const bodyModelo = document.getElementById("bodyTablaColor");
+
+const bodyColor = document.getElementById("bodyTablaColor");
 
 
 
@@ -41,7 +42,7 @@ const mostrarColor = (data) => {
     columna.appendChild(btnEliminar);
     fila.appendChild(columna);
 
-    bodyModelo.appendChild(fila);
+    bodyColor.appendChild(fila);
   });
   $(document).ready(function () {
     $("#tablaColor").DataTable();
