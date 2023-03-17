@@ -1,7 +1,7 @@
 /**
- * varaibles que se usan en el documento
+ * variables que se usan en el documento
  */
-const bodyModelo = document.getElementById("bodyTablaColor");
+const bodyColor = document.getElementById("bodyTablaColor");
 const disponible = 1;
 
 
@@ -41,7 +41,7 @@ const mostrarColor = (data) => {
     columna.appendChild(btnEliminar);
     fila.appendChild(columna);
 
-    bodyModelo.appendChild(fila);
+    bodyColor.appendChild(fila);
   });
   $(document).ready(function () {
     $("#tablaColor").DataTable();
@@ -120,9 +120,9 @@ function CrearColor() {
   let nuevoColor = {
     id_color: idColor,
     descripcion: descripcionColor,
-    registro: disponible,
+    
   };
-  console.log(nuevoColor);
+
 
   fetch(`http://localhost:3308/gestionarColor/buscarColor/${idColor}`)
     .then((res) => verificarID(res.status))

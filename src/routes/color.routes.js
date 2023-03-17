@@ -1,5 +1,6 @@
 import { Router } from "express";
 const db = require("../db/index");
+const help= require("../helpers/validarColor");
 const router = Router();
 /** http://localhost:3307/gestionar */
 /**
@@ -20,14 +21,10 @@ router.get("/coloresDescripcion", async (req, res) => {
  * Ruta que agrega un nuevo color
  */
 router.post("/gestionarColor/altaColor", async (req, res) => {
- 
-  if (! req.body.id_color) {
-    res.status(400).send("ID es requerido!");
-    return;
-  }
-
-  if (! req.body.descripcion) {
-    res.status(400).send("Descripcion es requerido");
+ let respuesta= await help.validarInformacionColor(req.body);
+//modifique lourdes
+  if (respuesta) {
+    res.status(400).send(respuesta);
     return;
   }
 
@@ -43,14 +40,13 @@ router.post("/gestionarColor/altaColor", async (req, res) => {
  * Ruta que modifica un color especifico
  */
 router.put("/gestionarColor/modificarColor", async (req, res) => {
-  if (!req.body.id_color) {
-    res.status(400).send("ID es requerido!");
+  let respuesta= await help.validarInformacionColor(req.body);
+//modifique lourdes
+  if (respuesta) {
+    res.status(400).send(respuesta);
     return;
   }
-  if (!req.body.descripcion) {
-    res.status(400).send("Descripcion es requerido");
-    return;
-  }
+
   const isUpdateOk = await db.Color.modificarColor(req.body);
   if (isUpdateOk) {
     res.status(200).json(isUpdateOk);
