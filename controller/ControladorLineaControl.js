@@ -1,21 +1,24 @@
 var id_turno = parseInt( window.localStorage.getItem("idturnoIngreso"));
 var dniUsuario = parseInt( window.localStorage.getItem("dniUsuario"));
-const selectorHora = document.getElementById("btnGrupoHoras");
+const selectorHora = document.getElementById("grupoBtnIncidencia");
 const date = new Date();
 const en_proceso = 3;
 const primera = 0;
 const defecto =1;
-const urlDefectoObservado = "http://localhost:3308/obtenerTipoDefectoObservado"
-const urlDefectoReproceso = "http://localhost:3308/obtenerTipoDefectoReproceso"
+const urlLocalHost = "http://localhost:3308/";
+const urlDefectoObservado = `${urlLocalHost}obtenerTipoDefectoObservado`
+const urlDefectoReproceso = `${urlLocalHost}obtenerTipoDefectoReproceso`
 const bodyDerechoObservado = document.getElementById("tablaPieDerechoObservado");
 const bodyIzquierdoObservado = document.getElementById("tablaPieIzquierdoObservado");
 const bodyDerechoReproceso = document.getElementById("tablaPieDerechoReporceso");
 const bodyIzquierdoReproceso = document.getElementById("tablaPieIzquierdoReproceso");
 const selectorLinea = document.getElementById("listadoNroLinea");
+let primeraEncontrados = new Array();
+let defectoEncontrados = new Array();
 
 opcionesLineas(selectorLinea);
 
-fetch(`http://localhost:3308/buscarJornadaLaboral/${dniUsuario}`)
+fetch(`${urlLocalHost}buscarJornadaLaboral/${dniUsuario}`)
   .then((res) => seleccionarLinea(res.status))
   .catch((error) => console.log(error));
 
@@ -27,20 +30,12 @@ function seleccionarLinea(estadoDeRespuesta) {
     });
   } else {
    alert("ya tiene una orden de produccion");
-    // cambiar el turno de ingreso de la jornada laboral???
     cargarDatosEmpleados();
   }
 }
 
-cargarDefectos(urlDefectoObservado, bodyDerechoObservado,"derechoObservado");
-cargarDefectos(urlDefectoObservado,bodyIzquierdoObservado,"izquierdoObservado");
-cargarDefectos(urlDefectoReproceso,bodyDerechoReproceso,"derechoReproceso");
-cargarDefectos(urlDefectoReproceso,bodyIzquierdoReproceso,"izquierdoReproceso");
-
-
-
 function cargarDatosEmpleados() {
-  fetch(`http://localhost:3308/supervisorCalidadAsociadoLinea/${dniUsuario}`)
+  fetch(`${urlLocalHost}supervisorCalidadAsociadoLinea/${dniUsuario}`)
     .then((res) => res.json())
     .then((data) => cargarNombre(data[0]))
     .catch((error) => console.log(error));
@@ -53,8 +48,13 @@ function cargarDatosEmpleados() {
     document.querySelector("#linea").innerText = data.nro_linea;
     document.querySelector("#estado").innerText = data.estado;
     window.localStorage.setItem("jornada", data.id_jornada_laboral);
-   
+
     cargarTurnoInspeccion(id_turno);
+
+    cargarDefectos(urlDefectoObservado, bodyDerechoObservado,"derechoObservado");
+    cargarDefectos(urlDefectoObservado,bodyIzquierdoObservado,"izquierdoObservado");
+    cargarDefectos(urlDefectoReproceso,bodyDerechoReproceso,"derechoReproceso");
+    cargarDefectos(urlDefectoReproceso,bodyIzquierdoReproceso,"izquierdoReproceso");
   };
 }
 
@@ -72,11 +72,12 @@ function agregarEmpleadoJornadaLaboral() {
     linea: nro_linea
   };
 
-    fetch(`http://localhost:3308/agregarJornada`, {
+    fetch(`${urlLocalHost}agregarJornada`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(jornadaAsociada),
     }).catch((error) => console.log(error));
+    window.location.reload();
   };
 
   function generateID() {
@@ -90,7 +91,7 @@ function agregarEmpleadoJornadaLaboral() {
   }
 
 function cargarTurnoInspeccion(turno){
-  fetch(`http://localhost:3308/horarioTurno/${turno}`)
+  fetch(`${urlLocalHost}horarioTurno/${turno}`)
     .then((res) => res.json())
     .then((data) => cargarHorarioTurno(data[0].hora_entrada,data[0].hora_salida))
     .catch((error) => console.log(error));
@@ -101,23 +102,26 @@ function cargarTurnoInspeccion(turno){
      var salida = hora_salida.split(":");
      var horaSalida = parseInt(salida[0]);
      let i =0 ; 
-    do {
-      var numHoraEntrada = parseInt(entrada[0])+i ;
+     do {
+       var numHoraEntrada = parseInt(entrada[0])+i ;
        var horaEntrada = numHoraEntrada +":00";
-       let boton = document.createElement("button");
-       boton.type = "button";
-       boton.className = "btn btn-outline-secondary"; 
-       boton.id = "btnInspeccion"+numHoraEntrada;
-       boton.innerText = horaEntrada;
-       boton.onclick = cargarInspeccion
-       selectorHora.appendChild(boton)
+       let boton = document.createElement("input");
+       boton.type = "radio";
+       boton.name = "btnInspeccion";
+       boton.value = ""+numHoraEntrada;
+       boton.ondblclick = cargarInspeccion;
+       let label = document.createElement("label");
+       label.innerHTML = horaEntrada;
+       label.className = "mx-4"
+       label.style = "font-size: 20px; "
+       selectorHora.appendChild(boton);
+       selectorHora.appendChild(label);
        i++;
-  }while(numHoraEntrada !== horaSalida)
-
+      }while(numHoraEntrada !== horaSalida)
+      
   }
 
 }
-
 
 function cargarDefectos(url, tablaDefecto, id){
   fetch(`${url}`)
@@ -167,7 +171,7 @@ function crearBoton() {
 }
 
 function opcionesLineas(selector) {
-  fetch(`http://localhost:3308/lineaConOrdenActiva`)
+  fetch(`${urlLocalHost}lineaConOrdenActiva`)
     .then((res) => res.json())
     .then((data) => mostrarOpciones(data))
     .catch((error) => console.log(error));
@@ -181,126 +185,262 @@ function opcionesLineas(selector) {
   };
 }
 function cargarInspeccion(){
-  contadorPrimera()
-  contadorDefecto("#tablaIzquierdoReproceso tbody","izquierdoReproceso") 
-  contadorDefecto("#tablaDerechoReproceso tbody","derechoReproceso") 
-  contadorDefecto("#tablaIzquierdoObservado tbody","izquierdoObservado")
-  contadorDefecto("#tablaDerechoObservado tbody","derechoObservado")
+    contadorPrimera()
+   contadorDefecto("#tablaPieIzquierdoReproceso","izquierdo","Reproceso") 
+    contadorDefecto("#tablaDerechoReproceso tbody","derecho","Reproceso") 
+    contadorDefecto("#tablaIzquierdoObservado tbody","izquierdo","Observado")
+    contadorDefecto("#tablaDerechoObservado tbody","derecho","Observado")
 }
 
-
-function contadorDefecto(tbody , pie){
-  contadorDefecto1(tbody, pie)
-  contadorDefecto2(tbody, pie)
-  contadorDefecto3(tbody, pie)
-  contadorDefecto4(tbody, pie)
-  contadorDefecto5(tbody, pie)
+function contadorDefecto(tbody , pie,tipo_defecto){
+  contadorDefecto1(tbody, pie,tipo_defecto)
+  contadorDefecto2(tbody, pie,tipo_defecto)
+  contadorDefecto3(tbody, pie,tipo_defecto)
+  contadorDefecto4(tbody, pie,tipo_defecto)
+  contadorDefecto5(tbody, pie,tipo_defecto)
 }
 
 function contadorPrimera(){
-  var primera =parseInt( $("#primera").val());
+  let primera=0;
   if (primera === 0){
-    $("#tablaParesPrimera tbody").on('click',"button.btnAgregarPrimera", function(){
-      primera++;
-      $("#primera").val(primera);
+    let horaClick = document.querySelector('input[name="btnInspeccion"]:checked').value;
+  $("#tablaParesPrimera tbody").on('click',"button.btnAgregarPrimera", function(){
+    primera++;
+    $("#primera").val(primera);
+    let  sumarIncidencia ={
+      "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+      "cantidad": 1
+    }
+    incidenciaPrimera(sumarIncidencia)
   });
   $("#tablaParesPrimera tbody").on('click',"button.btnEliminarPrimera", function(){
     if (primera>0){
-    primera--;
-    $("#primera").val(primera);
+      primera--;
+      $("#primera").val(primera);
+      let  restarIncidencia ={
+        "horaIncidencia":document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+        "cantidad": -1
+      }
+      incidenciaPrimera(restarIncidencia)
     }
   });
-  }else{
-
-    $("#primera").val(0); 
-  }
 
 }
+$("#primera").val(0);
+}
 
-function contadorDefecto1(tbody, pie){
-  var defecto1 = parseInt( $("#"+pie+"Defecto1").val());
+
+function contadorDefecto1(tbody, pie,tipo_defecto){
+  
+  let horaClick = document.querySelector('input[name="btnInspeccion"]:checked').value;
+  var defecto1 = parseInt( $("#"+pie+tipo_defecto+"Defecto1").val());
   if (defecto1 === 0){
     $(tbody).on('click',"button.btnSumarDefecto1", function(){
       defecto1++;
-      $("#"+pie+"Defecto1").val(defecto1);
-      var defecto =  $(this).parents("tr").find("td").eq(0).html();
-      console.log(defecto);
+      $("#"+pie+tipo_defecto+"Defecto1").val(defecto1);
+      let sumarDefecto = {
+        "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+         "defecto": $(this).parents("tr").find("td").eq(0).html(),
+         "cantidad": 1,
+         "pie": pie
+      }
+      incidenciaDefecto(sumarDefecto);
 });
 $(tbody).on('click',"button.btnEniminarDefecto1", function(){
   if(defecto1 >0){
     defecto1--;
-    $("#"+pie+"Defecto1").val(defecto1);
+    $("#"+pie+tipo_defecto+"Defecto1").val(defecto1);
+    let restarDefecto = {
+      "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+       "defecto": $(this).parents("tr").find("td").eq(0).html(),
+       "cantidad": -1,
+       "pie": pie
+    }
+    incidenciaDefecto(restarDefecto);
   }
 })
   }else{
-    $("#"+pie+"Defecto1").val(0);
+      $("#"+pie+tipo_defecto+"Defecto1").val(0);
+    }
   }
-}
-function contadorDefecto2(tbody, pie){
-  var defecto2 =parseInt( $("#"+pie+"Defecto2").val());
+
+function contadorDefecto2(tbody, pie,tipo_defecto){
+
+  let horaClick = document.querySelector('input[name="btnInspeccion"]:checked').value;
+  var defecto2 =parseInt( $("#"+pie+tipo_defecto+"Defecto2").val());
   if (defecto2 === 0){
   $(tbody).on('click',"button.btnSumarDefecto2", function(){
     defecto2++;
-    $("#"+pie+"Defecto2").val(defecto2);
+    $("#"+pie+tipo_defecto+"Defecto2").val(defecto2);
+    let sumarDefecto = {
+      "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+       "defecto": $(this).parents("tr").find("td").eq(0).html(),
+       "cantidad": 1,
+       "pie": pie
+    }
+    incidenciaDefecto(sumarDefecto);
   })
   $(tbody).on('click',"button.btnEniminarDefecto2", function(){
     if(defecto2 >0){
       defecto2--;
-      $("#"+pie+"Defecto2").val(defecto2);
+      $("#"+pie+tipo_defecto+"Defecto2").val(defecto2);
+      let restarDefecto = {
+        "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+         "defecto": $(this).parents("tr").find("td").eq(0).html(),
+         "cantidad": -1,
+         "pie": pie
+      }
+      incidenciaDefecto(restarDefecto);
     }
   })
 }else{
-  $("#"+pie+"Defecto2").val(0);
+    $("#"+pie+tipo_defecto+"Defecto2").val(0);
+  }
 }
-}
-function contadorDefecto3(tbody, pie){
-  var defecto3 =parseInt( $("#"+pie+"Defecto3").val());
+
+function contadorDefecto3(tbody, pie,tipo_defecto){
+
+  let horaClick = document.querySelector('input[name="btnInspeccion"]:checked').value;
+  var defecto3 =parseInt( $("#"+pie+tipo_defecto+"Defecto3").val());
   if (defecto3 === 0){
   $(tbody).on('click',"button.btnSumarDefecto3", function(){
     defecto3++;
-    $("#"+pie+"Defecto3").val(defecto3);
+    $("#"+pie+tipo_defecto+"Defecto3").val(defecto3);
+    let sumarDefecto = {
+      "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+       "defecto": $(this).parents("tr").find("td").eq(0).html(),
+       "cantidad": 1,
+       "pie": pie
+    }
+    incidenciaDefecto(sumarDefecto);
   })
   $(tbody).on('click',"button.btnEniminarDefecto3", function(){
     if(defecto3 >0){
       defecto3--;
-      $("#"+pie+"Defecto3").val(defecto3);
+      $("#"+pie+tipo_defecto+"Defecto3").val(defecto3);
+      let restarDefecto = {
+        "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+         "defecto": $(this).parents("tr").find("td").eq(0).html(),
+         "cantidad": -1,
+         "pie": pie
+      }
+      incidenciaDefecto(restarDefecto);
     }
   })
 }else{
-  $("#"+pie+"Defecto3").val(0);
+    $("#"+pie+tipo_defecto+"Defecto3").val(0);
+  }
 }
-}
-function contadorDefecto4(tbody, pie){
-  var defecto4 =parseInt( $("#"+pie+"Defecto4").val());
+
+
+function contadorDefecto4(tbody, pie,tipo_defecto){
+
+  let horaClick = document.querySelector('input[name="btnInspeccion"]:checked').value;
+  var defecto4 =parseInt( $("#"+pie+tipo_defecto+"Defecto4").val());
   if (defecto4 === 0){
   $(tbody).on('click',"button.btnSumarDefecto4", function(){
     defecto4++;
-    $("#"+pie+"Defecto4").val(defecto4);
+    $("#"+pie+tipo_defecto+"Defecto4").val(defecto4);
+    let sumarDefecto = {
+      "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+       "defecto": $(this).parents("tr").find("td").eq(0).html(),
+       "cantidad": 1,
+       "pie": pie
+    }
+    incidenciaDefecto(sumarDefecto);
   })
   $(tbody).on('click',"button.btnEniminarDefecto4", function(){
     if(defecto4 >0){
       defecto4--;
-      $("#"+pie+"Defecto4").val(defecto4);
+      $("#"+pie+tipo_defecto+"Defecto4").val(defecto4);
+      let restarDefecto = {
+        "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+         "defecto": $(this).parents("tr").find("td").eq(0).html(),
+         "cantidad": -1,
+         "pie": pie
+      }
+      incidenciaDefecto(restarDefecto);
     }
   })
+
+
 }else{
-  $("#"+pie+"Defecto4").val(0);
+    $("#"+pie+tipo_defecto+"Defecto4").val(0);
+  }
 }
-}
-function contadorDefecto5(tbody, pie){
-  var defecto5 =parseInt( $("#"+pie+"Defecto5").val());
+
+
+function contadorDefecto5(tbody, pie,tipo_defecto){
+
+  let horaClick = document.querySelector('input[name="btnInspeccion"]:checked').value;
+  var defecto5 =parseInt( $("#"+pie+tipo_defecto+"Defecto5").val());
   if (defecto5 === 0){
   $(tbody).on('click',"button.btnSumarDefecto5", function(){
     defecto5++;
-    $("#"+pie+"Defecto5").val(defecto5);
+    $("#"+pie+tipo_defecto+"Defecto5").val(defecto5);
+    let sumarDefecto = {
+      "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+       "defecto": $(this).parents("tr").find("td").eq(0).html(),
+       "cantidad": 1,
+       "pie": pie
+    }
+    incidenciaDefecto(sumarDefecto);
   })
   $(tbody).on('click',"button.btnEniminarDefecto5", function(){
     if(defecto5 >0){
       defecto5--;
-      $("#"+pie+"Defecto5").val(defecto5);
+      $("#"+pie+tipo_defecto+"Defecto5").val(defecto5);
+      let restarDefecto = {
+        "horaIncidencia": document.querySelector('input[name="btnInspeccion"]:checked').value +":00:00",
+         "defecto": $(this).parents("tr").find("td").eq(0).html(),
+         "cantidad": -1,
+         "pie": pie
+      }
+      incidenciaDefecto(restarDefecto);
     }
   })
 }else{
-  $("#"+pie+"Defecto5").val(0);
+    $("#"+pie+tipo_defecto+"Defecto5").val(0);
+  }
 }
+
+
+function incidenciaPrimera(incidenciaPrimera){
+  let incidenciaPrimeras = {
+    hora: incidenciaPrimera.horaIncidencia,
+    fecha:   "" + date.getFullYear() + "-" + (date.getMonth() + 1) +"-" +date.getDate(),
+    jornada:  parseInt( window.localStorage.getItem("jornada")),
+    cantidad: incidenciaPrimera.cantidad,
+    tipo_incidencia: "primera"
+  }
+  console.log(incidenciaPrimeras);
+  primeraEncontrados.push(incidenciaPrimeras);
+  console.log(primeraEncontrados);
+  
+  fetch(`${urlLocalHost}agregarIncidenciaPrimera`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(incidenciaPrimeras),
+  }).catch((error) => console.log(error));
+}
+
+function incidenciaDefecto(incidenciaDefecto){
+  let incidenciaDefectos = {
+    hora: incidenciaDefecto.horaIncidencia,
+    fecha:   "" + date.getFullYear() + "-" + (date.getMonth() + 1) +"-" +date.getDate(),
+    defecto:incidenciaDefecto.defecto,
+    jornada:  parseInt( window.localStorage.getItem("jornada")),
+    cantidad: incidenciaDefecto.cantidad,
+    tipo_incidencia:"defecto",
+    tipoPie: incidenciaDefecto.pie
+  }
+  console.log(incidenciaDefectos);
+  defectoEncontrados.push(incidenciaDefectos);
+  console.log(defectoEncontrados);
+  
+  fetch(`${urlLocalHost}agregarIncidenciaDefecto`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(incidenciaDefectos),
+  }).catch((error) => console.log(error));
 }

@@ -1,19 +1,22 @@
 import { Router } from "express";
+const db = require("../db/index");
 const admi = require('../servicio/administradorOrdenProduccion');
 const help = require('../helpers/validacionOrdenProduccion')
-const db = require("../db/index");
 const router = Router();
-/**crear una orden de produccion */
+/**crear una orden de produccion 
+ * ver el timer para hacerlo automatico -- el localh definirlo de iuna sola vez
+ * 
+*/
 router.post("/crearOrdenProduccion", async (req, res) => {
 
- let respuesta = await help.validarInformacionCreacionOP(req.body);
+ const  respuesta = await help.validarInformacionCreacionOP(req.body);
  if(respuesta){
-  res.status(404).send(respuesta);
+  return res.status(400).send(respuesta);
  }
  
  const ordenCreada = await admi.consultarExistenciaOrden(req.body.nro_orden_produccion)
   if (ordenCreada) {
-    res.status(400).send("Ya existe la orden de Produccion !!!");
+    res.status(409).send("Ya existe la orden de Produccion !!!");
     return;
   }
     const idEncontrado = await admi.buscarIdColor(req.body.id_color);

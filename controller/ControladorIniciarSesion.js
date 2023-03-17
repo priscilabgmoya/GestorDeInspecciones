@@ -90,27 +90,30 @@ function CrearUsuario() {
   location.reload();
 }
 function redireccionPantallaDeTrabajo(tipoEmpleado) {
+let dni_usuario;
   /**
    * si es supervisor de linea
    */
   if (tipoEmpleado === "supervisor de linea") {
     window.location.href = "../view/OrdenProduccion.html";
-    window.localStorage.setItem("dniUsuario", $("#usuarioInput").val());
+   dni_usuario = $("#usuarioInput").val();
   }
   /**
    * si es supervisor de calidad
-   *
-   */
-  if (tipoEmpleado === "supervisor de calidad") {
-    window.location.href = "../view/LineaControl.html";
+  *
+  */
+ if (tipoEmpleado === "supervisor de calidad") {
+   window.location.href = "../view/LineaControl.html";
+   dni_usuario = $("#usuarioInput").val();
   }
   /**
    * si es el administrador
-   *
-   */
-  if (tipoEmpleado === "administrativo") {
-    window.location.href = "../view/GestionarUsuario.html";
+  *
+  */
+ if (tipoEmpleado === "administrativo") {
+   window.location.href = "../view/GestionarUsuario.html";
   }
+  window.localStorage.setItem("dniUsuario",dni_usuario);
 }
 function generatePassword() {
   var pass = "";

@@ -1,8 +1,9 @@
 /**
  * variables que se usan en el documento
  */
+
 const bodyColor = document.getElementById("bodyTablaColor");
-const disponible = 1;
+
 
 
 /**
@@ -120,28 +121,14 @@ function CrearColor() {
   let nuevoColor = {
     id_color: idColor,
     descripcion: descripcionColor,
-    
   };
-
-
-  fetch(`http://localhost:3308/gestionarColor/buscarColor/${idColor}`)
-    .then((res) => verificarID(res.status))
-    .catch((error) => console.log(error));
-
-  const verificarID = (estadoRespuesta) => {
-    if (estadoRespuesta === 200) {
-      alert("Error: Ya existe Color.");
-      location.reload();
-    } else {
-      fetch(`http://localhost:3308/gestionarColor/altaColor`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nuevoColor),
-      }).catch((error) => console.log(error));
-      alert("Color Creado!!");
-      location.reload();
-    }
-  };
+  fetch(`http://localhost:3308/gestionarColor/altaColor`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(nuevoColor),
+  }).catch((error) => console.log(error));
+  alert("Color Creado!!");
+  location.reload();
 }
 $("#btnGuardarColorModal").on("click", function () {
   CrearColor();

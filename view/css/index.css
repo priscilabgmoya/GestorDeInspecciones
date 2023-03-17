@@ -45,7 +45,7 @@ main{
 
 
 #GestionColor{
-  padding-top: 541px;
+  padding-top: 231px;
 }
 #lineaControl {
   padding-top: 397px;
@@ -61,35 +61,11 @@ main{
   width: 54%;
   border-radius: 400px;
 } 
-#tablaOperaciones {
-  display: flex;
-  justify-content: center;
-  padding-top: 15px;
-}
-#tablaOperaciones .card {
-  width: 54%;
-  height: 16vh;
-}
-#tablaOperaciones table{
-  width: 96%;
-  height: 15vh;
-}
-#tablaOperaciones td {
-  padding:  0px 23px;
-  margin: 0px;
-  }
 
-#tablaListadoProduccion{
-  display: flex;
-  justify-content: center;
+#GestionModelo{
+  padding-top: 337px;
 }
-@media all and (max-width: 768px){
-  #tablaOperaciones td {
-    padding: 0px 9px;
-    margin: 0px;
-}
-#tablaOperaciones .card {
-  width: 96%;
-  height: 27vh;
-}
+
+#GestionUsuarios{
+  padding-top: 337px;
 }

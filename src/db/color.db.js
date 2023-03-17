@@ -15,6 +15,9 @@ module.exports.getColores = async function () {
     return Promise.reject(err);
   }
 };
+/**
+ * Retornamos la descripcion  todos los colores
+ */
 module.exports.getColoresDescripcion = async function () {
   let conn;
   try {
@@ -36,11 +39,10 @@ module.exports.agregarColor = async function (color) {
   let conn;
   try {
     conn = await getConnection();
-    const SQL = `INSERT INTO ${tablaColor} (id_color,descripcion,registro) VALUES (?, ?, ?)`;
+    const SQL = `INSERT INTO ${tablaColor} (id_color,descripcion) VALUES (?, ?)`;
     const params = [];
     params[0] = color.id_color;
     params[1] = color.descripcion;
-    params[2] = color.registro;
     const rows = await conn.query(SQL, params);
     return rows;
   } catch (err) {
@@ -64,7 +66,7 @@ module.exports.buscarColor = async function (idColor) {
   }
 };
 /**
- * Damos de baja logicamente un color
+ * Damos de baja un color
  * @param {Object} colorEliminado
  * @returns
  */
@@ -101,20 +103,6 @@ module.exports.modificarColor = async function (colorModificado) {
   }
 };
 
-module.exports.disponibilidadColor = async function (colorSeleccionado){
-  let conn;
-  try{
-    conn = await getConnection();
-    const SQL = `UPDATE ${tablaColor}  SET registro = ? WHERE descripcion=?`;
-    const params=[]
-    params[0]=colorSeleccionado.registro
-    params[1]=colorSeleccionado.descripcion
-    const row = await conn.query(SQL,params);
-    return row;
-  }catch(err){
-    return Promise.reject(err);
-  }
-}
 /**
  * Buscamos un id de color 
  */

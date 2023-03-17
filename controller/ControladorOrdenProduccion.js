@@ -7,10 +7,10 @@ const selectorLinea = document.getElementById("listadoNroLinea");
 const selectorModelo = document.getElementById("listadoModelo");
 const selectorColor = document.getElementById("listadoColor");
 const date = new Date();
-
-
+const localHost = 'http://localhost:3308/';
 var dniUsuario = window.localStorage.getItem("dniUsuario");
 var turnoIngreso = window.localStorage.getItem("turnoIngreso");
+
 
 
 opcionesLineas(selectorLinea);
@@ -25,7 +25,7 @@ $("#btnCrearOrdenProduccion").on("click", function () {
 });
 
 function cargarDatosEmpleados() {
-  fetch(`http://localhost:3308/nombreApellidoUsuario/${dniUsuario}`)
+  fetch(`${localHost}nombreApellidoUsuario/${dniUsuario}`)
     .then((res) => res.json())
     .then((data) => cargarNombre(data[0]))
     .catch((error) => console.log(error));
@@ -51,7 +51,7 @@ function habilitarBotones(turno) {
 }
 
 function opcionesColor(selector) {
-  fetch(`http://localhost:3308/coloresDescripcion`)
+  fetch(`${localHost}coloresDescripcion`)
     .then((res) => res.json())
     .then((data) => mostrarOpciones(data))
     .catch((error) => console.log(error));
@@ -65,7 +65,7 @@ function opcionesColor(selector) {
   };
 }
 function opcionesModelo(selector) {
-  fetch(`http://localhost:3308/modeloDenominacion`)
+  fetch(`${localHost}modeloDenominacion`)
     .then((res) => res.json())
     .then((data) => mostrarOpciones(data))
     .catch((error) => console.log(error));
@@ -80,7 +80,7 @@ function opcionesModelo(selector) {
 }
 
 function opcionesLineas(selector) {
-  fetch(`http://localhost:3308/numerosDeLineas/${disponibilidad}`)
+  fetch(`${localHost}numerosDeLineas/${disponibilidad}`)
     .then((res) => res.json())
     .then((data) => mostrarOpciones(data))
     .catch((error) => console.log(error));
@@ -117,12 +117,29 @@ function crearOrdenProduccion() {
 /**
  * Guardamos la orden de produccion en el DB
  */
-fetch(`http://localhost:3308/crearOrdenProduccion`, {
+fetch(`${localHost}crearOrdenProduccion`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(nuevaOrdenProduccion),
-      }).catch((error) => console.log(error));
-      alert('Orden de Produccion Creada');
+      }).then(res => estadoOrden(res.status))
+      .catch((error) => console.log(error));
+const estadoOrden =  (estado)=>{
+  if(estado === 201){
+    alert('Orden de Produccion Creada');
+  }
+  if(estado === 409){
+    alert('Orden de Produccion Ya existente');
+  }
+  if(estado === 400){
+    alert('Error: falta informacion de nro de orden y/o color y/o linea y/o modelo');
+  }
+  if(estado === 404){
+    alert('Error: la informacion de color y/o linea y/o modelo propocionada no existe');
+  }
+  if(estado === 500){
+    alert('Error: no se creo orden de produccion ');
+  }
+}
   
 }
 
@@ -157,7 +174,7 @@ function cambiarEstadoOrdenProduccion(estado){
         nroOrden: nro_orden,
         estado: estado
   }
-  fetch(`http://localhost:3308/cambiarEstadoOrdenProduccion`, {
+  fetch(`${localHost}cambiarEstadoOrdenProduccion`, {
    method: "PUT",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify(cambiarEstado),

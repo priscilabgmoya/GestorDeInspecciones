@@ -194,7 +194,7 @@ function CrearModelo() {
     limiteInfReproceso = parseInt(
       $("#inputLimiteInferiorReprocesoModal").val()
     );
-
+/**objeto que agrego  */
   let nuevoModelo = {
     sku: sku,
     denominacion: denominacion,
@@ -202,27 +202,16 @@ function CrearModelo() {
     limite_inferior_observado: limiteInfObservado,
     limite_superior_reproceso: limiteSupReproceso,
     limite_inferior_reproceso: limiteInfReproceso,
-    registro: activo,
   };
 
-  fetch(`http://localhost:3308/gestionarModelo/buscarModelo/${sku}`)
-  .then((res) =>verificarSku(res.status))
-  .catch((error) => console.log(error));
+fetch(`http://localhost:3308/gestionarModelo/altaModelo`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(nuevoModelo),
+}).catch((error) => console.log(error));
 
-  const verificarSku = (estadoRespuesta) =>{
-    if (estadoRespuesta === 200) {
-     alert("Error: Ya existe Modelo.");
-     location.reload();
-    } else {
-      fetch(`http://localhost:3308/gestionarModelo/altaModelo`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nuevoModelo),
-      }).catch((error) => console.log(error));
-      alert("Modelo Creado!!");
-      location.reload();
-    }
-  }
+alert("Modelo Creado!!");
+location.reload();
 }
 
 $("#btnGuardarModal").on("click", function () {
