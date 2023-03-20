@@ -52,10 +52,10 @@ module.exports.cambiarDisponibilidad = async function (ordenProduccion) {
   let conn;
   try {
     conn = await getConnection();
-    const SQL = `UPDATE ${tablaOrdenProduccion}  SET estado= ? WHERE nro_linea=?`;
+    const SQL = `UPDATE ${tablaOrdenProduccion}  SET estado= ? WHERE nro_produccion=?`;
     const params = [];
     params[0] = ordenProduccion.estado;
-    params[1] = ordenProduccion.linea;
+    params[1] = ordenProduccion.nroOrden;
     const rows = await conn.query(SQL, params);
     return rows;
   } catch (err) {
@@ -127,3 +127,20 @@ module.exports.getJornadayNroOrden= async function (nro_linea) {
     return Promise.reject(err);
   }
 }
+
+module.exports.getOrdenActiva = async function (nro_op) {
+  let conn;
+  try {
+    conn = await getConnection();
+    const SQL = `SELECT op.nro_produccion, op.id_jornada_laboral, c.descripcion AS color, op.nro_linea , m.denominacion AS modelo, e.tipo_estado AS estado
+    FROM ${tablaOrdenProduccion} op  
+    JOIN ${tablaColor} c ON c.id_color = op.id_color 
+    JOIN ${tablaModelo} m ON m.sku = op.sku  
+    JOIN ${tablaEstado} e ON e.id_estado = op.estado
+    WHERE op.fecha is NOT null AND op.id_jornada_laboral is NOT NULL AND op.estado != 'finalizada' AND  op.nro_produccion =?`
+    const row = await conn.query(SQL, [nro_op]);
+    return row;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};

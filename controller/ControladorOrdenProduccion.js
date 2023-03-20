@@ -6,19 +6,58 @@ const finalizada = 2;
 const selectorLinea = document.getElementById("listadoNroLinea");
 const selectorModelo = document.getElementById("listadoModelo");
 const selectorColor = document.getElementById("listadoColor");
+const contenedorEstado = document.getElementById("estadoOrdenProduccion");
 const date = new Date();
 const localHost = 'http://localhost:3308/';
 var dniUsuario = window.localStorage.getItem("dniUsuario");
 var turnoIngreso = window.localStorage.getItem("turnoIngreso");
-
+const input = document.getElementById('inputNroOrdenProduccion');
 
 
 opcionesLineas(selectorLinea);
 opcionesModelo(selectorModelo);
 opcionesColor(selectorColor);
 
+input.oninput = updateValue
 
-cargarDatosEmpleados();
+function updateValue() {
+  var ingreso =input.value;
+  fetch(`${localHost}ordenActiva/${ingreso}`)
+  .then((res) => res.json())
+  .then((data) => verInformacion(data[0]))
+  .catch((error) => console.log(error));
+  const verInformacion = (dato)=>{
+    if (dato != undefined){
+      console.log(dato);
+      cargarDatosEmpleados();
+      $("#inputModelo").val(dato.modelo)
+      $("#inputColor").val(dato.color)
+      $("#inputNroLinea").val(dato.nro_linea)
+      cargarEstado(dato.estado);
+      window.localStorage.setItem("jornadaCargada", dato.id_jornada_laboral); 
+      if(dato.estado === "en proceso"){
+        $('#btnPausarOrdenProduccion').prop("disabled", false);
+        $('#btnFInalizarOrdenProduccion').prop("disabled", false);
+      }else if(dato.estado === "pausada"){
+        $('#btnContinuarOrdenProduccion').prop("disabled", false);
+        $('#btnFInalizarOrdenProduccion').prop("disabled", false);
+      }
+    }else{
+      var nuevaOp = confirm('¿Desea Crear una Nueva orden de Produccion?');
+      if(nuevaOp === true){
+          habilitarBotones(turnoIngreso);
+        }
+     }
+}
+}
+function cargarEstado(estado){
+  const etiquetaB = document.createElement("b");
+  etiquetaB.innerText = "Estado: ";
+  const label = document.createElement("label"); 
+  label.innerText = estado; 
+  contenedorEstado.appendChild(etiquetaB);
+  contenedorEstado.appendChild(label); 
+}
 
 $("#btnCrearOrdenProduccion").on("click", function () {
   crearOrdenProduccion();
@@ -30,14 +69,13 @@ function cargarDatosEmpleados() {
     .then((data) => cargarNombre(data[0]))
     .catch((error) => console.log(error));
   const cargarNombre = (data) => {
-    $("#inputSupervisorLinea").val(` ${data.nombre} ${data.apellido}`);
-    habilitarBotones(turnoIngreso);
+    document.querySelector("#inputSupervisorLinea").innerText=`  ${data.nombre} ${data.apellido}`;
   };
 }
 function habilitarBotones(turno) {
   
   if (turno === "mañana" || turno === "tarde") {
-    $("#inputTurno").val(turno);
+    document.querySelector("#inputTurno").innerText = " "+turno; 
     $("#btnCrearOrdenProduccion").prop("disabled", false);
     $("#inputNroOrdenProduccion").prop("disabled", false);
     $("#inputNroLinea").prop("disabled", false);
@@ -154,30 +192,48 @@ function generateID() {
 }
 
 $('#btnPausarOrdenProduccion').on('click', function(){
-  cambiarEstadoOrdenProduccion(pausada)
+  cambiarEstadoOrdenProduccion("pausada");
+  window.location.reload();
 });
 
 $('#btnContinuarOrdenProduccion').on('click', function(){
-  cambiarEstadoOrdenProduccion(en_proceso)
+  cambiarEstadoOrdenProduccion("en proceso");
+  window.location.reload();
 });
 $('#btnFInalizarOrdenProduccion').on('click', function(){
-  
+  finalizarOrdenProduccion("finalizada");
+  window.location.reload();
 });
 
 $('#btnCancelarOrdenProduccion').on('click', function(){
-  window.location.reload()
+  window.location.reload();
 });
 
-function cambiarEstadoOrdenProduccion(estado){
+function cambiarEstadoOrdenProduccion(estadoIngresado){
   var  nro_orden = parseInt($("#inputNroOrdenProduccion").val());
   var cambiarEstado = {
         nroOrden: nro_orden,
-        estado: estado
+        estado: estadoIngresado
   }
   fetch(`${localHost}cambiarEstadoOrdenProduccion`, {
    method: "PUT",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify(cambiarEstado),
  }).catch((error) => console.log(error));
-location.reload();
+}
+
+function finalizarOrdenProduccion(estadoIngresado){
+  var  nro_orden = parseInt($("#inputNroOrdenProduccion").val());
+  var cambiarEstado = {
+        nroOrden: nro_orden,
+        fecha:   "" + date.getFullYear() + "-" + (date.getMonth() + 1) +"-" +date.getDate(),
+        estado: estadoIngresado,
+        id_jornada_laboral: parseInt(window.localStorage.getItem("jornadaCargada"))
+  }
+  console.log(cambiarEstado);
+  fetch(`${localHost}finalizarOrdenProduccion`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(cambiarEstado),
+  }).catch((error) => console.log(error));
 }

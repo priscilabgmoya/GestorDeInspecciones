@@ -1,16 +1,19 @@
+/**
+ * variables que usamos durante el proceso
+ */
 const bodyUsuario = document.getElementById("bodyTablaUsuario");
 const tipo_Empleado = document.getElementById("seleccionTipoEmpleado");
 const tipo_Empleado_modal = document.getElementById("seleccionTipoEmpleadoModal");
-fetch(`http://localhost:3308/gestionarUsuario`)
+const urlLocalHost = "http://localhost:3308/";
+
+TipoEmpleado(tipo_Empleado_modal);
+/**
+ * listamos todos los usuarios cargados en la db
+ */
+fetch(`${urlLocalHost}gestionarUsuario`)
   .then((res) => res.json())
   .then((data) => mostrarUsuario(data))
   .catch((error) => console.log(error));
-
-TipoEmpleado(tipo_Empleado_modal);
-
-$("#btnGuardarUsuarioModal").on("click", function () {
-  CrearUsuario();
-});
 function mostrarUsuario(data) {
   data.forEach((usuario) => {
     let fila = document.createElement("tr");
@@ -63,21 +66,27 @@ function crearBoton() {
   return boton;
 }
 function TipoEmpleado(selector) {
-  fetch("http://localhost:3308/usuario/tipoEmpleado")
+  fetch(`${urlLocalHost}usuario/tipoEmpleado`)
     .then((res) => res.json())
     .then((data) => mostrarTipoEmpleado(data))
     .catch((error) => console.log(error));
-
-  const mostrarTipoEmpleado = (data) => {
-    for (let categoria of data) {
-      let nuevaOpcion = document.createElement("option");
-      nuevaOpcion.text = categoria.descripcion;
-      selector.appendChild(nuevaOpcion);
-    }
-  };
-}
-function CrearUsuario() {
-  let dni =$("#inputDniModal").val(),
+    
+    const mostrarTipoEmpleado = (data) => {
+      for (let categoria of data) {
+        let nuevaOpcion = document.createElement("option");
+        nuevaOpcion.text = categoria.descripcion;
+        selector.appendChild(nuevaOpcion);
+      }
+    };
+  }
+  /**
+   * creamos un usuario nuevo 
+   */
+  $("#btnGuardarUsuarioModal").on("click", function () {
+    CrearUsuario();
+  });
+  function CrearUsuario() {
+    let dni =$("#inputDniModal").val(),
     nombre = $("#inputNombreModal").val(),
     apellido = $("#inputApellidoModal").val(),
     correo = $("#inputCorreoElectronicoModal").val(),
@@ -91,14 +100,30 @@ function CrearUsuario() {
     id_tipo_empleado: tipoEmpleado,
     contraseña: generatePassword(),
   };
-  fetch(`http://localhost:3308/gestionarUsuario/altaUsuario`, {
+  fetch(`${urlLocalHost}gestionarUsuario/altaUsuario`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(nuevoUsuario),
-  }).catch((error) => console.log(error));
-  alert("Usuario Creado!!");
-  location.reload();
+  }).then(res => estadoOrden(res.status))
+  .catch((error) => console.log(error));
+const estadoOrden =  (estado)=>{
+if(estado === 201){
+alert('Usuario Creado');
 }
+if(estado === 409){
+alert('Usuario  Ya existente');
+}
+if(estado === 400){
+alert('Error: falta informacion de dni  y/o nombre y/o apellido y/o correo y/o tipo empleado ');
+}
+if(estado === 500){
+alert('Error: no se creo el Usuario');
+}
+}
+}
+/**
+ * eliminamos un usuario seleccionado
+ */
 function eliminarUsuario(tbody, boton) {
   $(tbody).on("click", boton, function () {
     let dni = parseInt($(this).parents("tr").find("td").eq(0).html());
@@ -107,7 +132,7 @@ function eliminarUsuario(tbody, boton) {
       dni: dni 
     };
     $("#btnEliminarUsuarioModal").on("click", function () {
-      fetch(`http://localhost:3308/gestionarUsuario/bajaLogicaUsuario`, {
+      fetch(`${urlLocalHost}gestionarUsuario/bajaLogicaUsuario`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(usuarioEliminado),
@@ -117,6 +142,9 @@ function eliminarUsuario(tbody, boton) {
     });
   });
 }
+/**
+ * modificamos un usurio seleccionado 
+ */
 function modificarUsuario(tbody, boton) {
   $(tbody).on("click", boton, function () {
     let dni = $(this).parents("tr").find("td").eq(0).html(),
@@ -130,7 +158,7 @@ function modificarUsuario(tbody, boton) {
     $("#inputApellido").val(apellido);
     $("#inputCorreoElectronico").val(correoElectronico);
 
-    fetch("http://localhost:3308/usuario/tipoEmpleado")
+    fetch(`${urlLocalHost}usuario/tipoEmpleado`)
       .then((res) => res.json())
       .then((data) => mostrarTipoEmpleado(data))
       .catch((error) => console.log(error));
@@ -184,7 +212,7 @@ function modificarUsuario(tbody, boton) {
     usuarioModificado.id_tipo_empleado = tipoEmpleado;
    }
    $("#btnGuardarModificacionUsuario").on('click', function(){
-   fetch(`http://localhost:3308/gestionarUsuario/modificarUsuario`, {
+   fetch(`${urlLocalHost}gestionarUsuario/modificarUsuario`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(usuarioModificado),

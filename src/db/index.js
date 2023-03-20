@@ -10,4 +10,5 @@ module.exports={
     Defecto: require('./defecto.db'),
     Incidencia: require('./incidencia.db'),
     Pie: require('./pie.db'),
+    Estado: require('./estados.db')
 }

@@ -43,15 +43,15 @@
            </article>
             <article class="row">
                 <div class = "col-xl-5 p-2 d-flex justify-content-center">
-                  <b>Nombre Supervisor de Linea:  </b>
+                  <b>Nombre Supervisor de Linea:   </b>
                   <br>
-                  <input type=»text» readonly=»readonly» id="inputSupervisorLinea" style="width: 50%; border: none;" />
+                  <label id="inputSupervisorLinea" style="width: 50%;"></label>
                 </div>
              
                 <div class = "col-xl-5 p-2  d-flex justify-content-center">
-                    <b>Turno:</b>
+                    <b>Turno: </b>
                     <br>
-                    <input type=»text» readonly=»readonly» id="inputTurno" style="width: 50%; border: none" />
+                    <label  id="inputTurno" style="width: 50%;" ></label>
                 </div>
                
             </article>
@@ -60,26 +60,29 @@
       <br>
         
           <article class="row d-flex justify-content-around">
-                          <aside class="col-xl-5"><a>Nro. Orden de Produccion: </a><input  type="number" id="inputNroOrdenProduccion" style="width: 45%;" required disabled></aside>
-                            <aside class="col-xl-5  py-2"> <a>Nro. de Linea:   </a><input type="number" list="listadoNroLinea"  style="width: 75%;"  id="inputNroLinea" required disabled>
+                          <aside class="col-xl-5"><b>Nro. Orden de Produccion: </b><input  type="number" id="inputNroOrdenProduccion" style="width: 45%;" required ></aside>
+                            <aside class="col-xl-5  py-2"> <b>Nro. de Linea:   </b><input type="number" list="listadoNroLinea"  style="width: 75%;"  id="inputNroLinea" required disabled>
                               <datalist id="listadoNroLinea">
                               </datalist> 
                              </aside>
-                            <aside class="col-xl-5  py-2"><a>Modelo:  </a><input type="text" list="listadoModelo" style="width: 75%;" id="inputModelo" required disabled>
+                            <aside class="col-xl-5  py-2"><b>Modelo:  </b><input type="text" list="listadoModelo" style="width: 75%;" id="inputModelo" required disabled>
                               <datalist id="listadoModelo">
                               </datalist> 
                             </aside>
-                            <aside class="col-xl-5 py-2"><a>Color:  </a><input type="text" list="listadoColor" style="width: 75%;"  id="inputColor" required disabled>
+                            <aside class="col-xl-5 py-2"><b>Color:  </b><input type="text" list="listadoColor" style="width: 75%;"  id="inputColor" required disabled>
                               <datalist id="listadoColor">
                               </datalist> 
+                           </aside>
+                           <aside class="col-xl-5 py-2" id="estadoOrdenProduccion">
+
                            </aside>
           </article>
           <br>          
             <article class="d-flex justify-content-between py-4">
                 <br>
                
-                <button class="btn btn-success " type="button"" id="btnCrearOrdenProduccion" disabled >CREAR ORDEN DE PRODUCCIÓN</button>
-                <button class="btn btn-danger" type="button"" id="btnCancelarOrdenProduccion" >CANCELAR </button>
+                <button class="btn btn-success " type="button" id="btnCrearOrdenProduccion" disabled >CREAR ORDEN DE PRODUCCIÓN</button>
+                <button class="btn btn-danger" type="button" id="btnCancelarOrdenProduccion" >CANCELAR </button>
                 <br>
             </article>
      </div>
@@ -91,17 +94,17 @@
            <tr>
                <td>
                    <aside class="col-xl-4  col-sm-4 col-md-4">
-                       <button class="btn btn-warning " type="button" id="btnPausarOrdenProduccion" >PAUSAR</button>
+                       <button class="btn btn-warning " type="button" id="btnPausarOrdenProduccion" disabled>PAUSAR</button>
                    </aside>
                </td>
                <td>
                    <aside class="col-xl-4  col-sm-4 col-md-4">
-                       <button class="btn btn-success text-dark" type="button" id="btnContinuarOrdenProduccion" >CONTINUAR</button>
+                       <button class="btn btn-success text-dark" type="button" id="btnContinuarOrdenProduccion" disabled>CONTINUAR</button>
                    </aside>
                </td>
                <td>
                    <aside class="col-xl-4  col-sm-4 col-md-4">
-                       <button class="btn btn-danger text-dark" type="button" id="btnFInalizarOrdenProduccion" >FINALIZAR</button>
+                       <button class="btn btn-danger text-dark" type="button" id="btnFInalizarOrdenProduccion" disabled>FINALIZAR</button>
                    </aside>
                </td>
            </tr>
