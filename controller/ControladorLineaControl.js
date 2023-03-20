@@ -444,3 +444,17 @@ function incidenciaDefecto(incidenciaDefecto){
     body: JSON.stringify(incidenciaDefectos),
   }).catch((error) => console.log(error));
 }
+$("#abandonarInspeccion").on('click', function(){
+  var cambiarEstado = {
+    nroOrden: document.querySelector("#nroOrden").innerText,
+    fecha:   "" + date.getFullYear() + "-" + (date.getMonth() + 1) +"-" +date.getDate(),
+    estado: "finalizada",
+    id_jornada_laboral: parseInt(window.localStorage.getItem("jornada"))
+}
+console.log(cambiarEstado);
+fetch(`${localHost}finalizarOrdenProduccion`, {
+method: "PUT",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(cambiarEstado),
+}).catch((error) => console.log(error));
+})
