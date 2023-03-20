@@ -25,4 +25,29 @@ module.exports.buscarskuModelo = async function (descripcionModelo) {
     return null;
   }
 };
+module.exports.buscarIdEstado = async function (estado){
+  const idEstadoEncontrado = await db.Estado.obtenerIdEstado(estado);
+  if (idEstadoEncontrado) {
+    return idEstadoEncontrado.id_estado;
+  } else {
+    return null;
+  }
+}
+module.exports.finalizarOrdenProduccion = async function (ordenProduccion){
+  let cambiarEstadoOp = {
+    nroOrden: ordenProduccion.nroOrden,
+    estado: ordenProduccion.estado
+  }
+  let finalizarJornada = {
+    fecha: ordenProduccion.fecha,
+    id_jornada_laboral: ordenProduccion.id_jornada_laboral
+  }
+  const cambiarEstadoOrdenProduccion = await db.OrdenProduccion.cambiarDisponibilidad(cambiarEstadoOp);
+  const finalizarOp = await db.JornadaLaboral.finalizarJornadaLaboral(finalizarJornada);
+  if (cambiarEstadoOrdenProduccion && finalizarOp) {
+    return ordenProduccion;
+  } else {
+    return null;
+  }
+}
 

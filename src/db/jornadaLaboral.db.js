@@ -35,3 +35,22 @@ module.exports.idJornadaLaboral = async function (dniEmpleado){
         }
 };
 
+/**
+ * le agregamos una fecha fin a la jornada laboral 
+ * @param {Object} ordenProduccion
+ * @returns
+ */
+module.exports.finalizarJornadaLaboral  = async function (ordenProduccion) {
+  let conn;
+  try {
+    conn = await getConnection();
+    const SQL = `UPDATE ${tablaJornadaLaboral}  SET fecha_fin= ? WHERE id_jornada_laboral=?`;
+    const params = [];
+    params[0] = ordenProduccion.fecha;
+    params[1] = ordenProduccion.id_jornada_laboral;
+    const rows = await conn.query(SQL, params);
+    return rows;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};

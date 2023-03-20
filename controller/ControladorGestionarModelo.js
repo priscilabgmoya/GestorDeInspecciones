@@ -2,10 +2,11 @@
  * varaibles que se usan en el documento
  */
 const bodyModelo = document.getElementById("bodyTablaModelo");
+const urlLocalHost = "http://localhost:3308/";
 /**
  * Listamos los modelos desde la DB
  */
-fetch(`http://localhost:3308/gestionarModelo/listado`)
+fetch(`${urlLocalHost}gestionarModelo/listado`)
   .then((res) => res.json())
   .then((data) => mostrarModelo(data))
   .catch((error) => console.log(error));
@@ -144,7 +145,7 @@ function modificarModelo(tbody, boton) {
     }
 
     $("#btnGuardarModificacion").on("click", function () {
-      fetch(`http://localhost:3308/gestionarModelo/modificarModelo`, {
+      fetch(`${urlLocalHost}gestionarModelo/modificarModelo`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(modeloModificado),
@@ -165,7 +166,7 @@ function eliminarModelo(tbody, boton) {
       sku: sku
     };
     $("#btnEliminarModeloModal").on("click", function () {
-      fetch(`http://localhost:3308/gestionarModelo/eliminarModelo`, {
+      fetch(`${urlLocalHost}gestionarModelo/eliminarModelo`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(modeloEliminado),
@@ -204,14 +205,26 @@ function CrearModelo() {
     limite_inferior_reproceso: limiteInfReproceso,
   };
 
-fetch(`http://localhost:3308/gestionarModelo/altaModelo`, {
+fetch(`${urlLocalHost}gestionarModelo/altaModelo`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify(nuevoModelo),
-}).catch((error) => console.log(error));
-
-alert("Modelo Creado!!");
-location.reload();
+}).then(res => estadoOrden(res.status))
+.catch((error) => console.log(error));
+const estadoOrden =  (estado)=>{
+if(estado === 201){
+alert('Modelo Creado');
+}
+if(estado === 409){
+alert('Modelo  Ya existente');
+}
+if(estado === 400){
+alert('Error: falta informacion de SKU  y/o denominacion y/o limite superior Observado y/o limite inferior Observado y/o limite superior Reproceso y/o limite inferior Reproceso');
+}
+if(estado === 500){
+alert('Error: no se creo el Usuario');
+}
+}
 }
 
 $("#btnGuardarModal").on("click", function () {

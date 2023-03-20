@@ -1,18 +1,18 @@
 const date = new Date();
-
+const urlLocalHost = "http://localhost:3308/";
 $("#btnIniciarSesion").on("click", function () {
   iniciarSesion();
 });
 function iniciarSesion() {
   var dni = $("#usuarioInput").val();
   cargarTurnos();
-  fetch(`http://localhost:3308/gestionarUsuario/buscarEmpleado/${dni}`)
+  fetch(`${urlLocalHost}gestionarUsuario/buscarEmpleado/${dni}`)
     .then((res) => verificarRegistro(res.status))
     .catch((error) => console.log(error));
 
   const verificarRegistro = (estadoRespuesta) => {
     if (estadoRespuesta === 200) {
-      fetch(`http://localhost:3308/usuarioRegistrado/${dni}`)
+      fetch(`${urlLocalHost}usuarioRegistrado/${dni}`)
         .then((res) => res.json())
         .then((data) => validarContraseña(data[0]))
         .catch((error) => console.log(error));
@@ -33,7 +33,7 @@ function validarContraseña(dato) {
 
 function cargarTurnos() {
   var horaIngreso = date.toLocaleTimeString();
-  fetch(`http://localhost:3308/turnosDisponibles`)
+  fetch(`${urlLocalHost}turnosDisponibles`)
     .then((res) => res.json())
     .then((data) => obtenerTurno(data))
     .catch((error) => console.log(error));

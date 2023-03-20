@@ -3,13 +3,13 @@
  */
 
 const bodyColor = document.getElementById("bodyTablaColor");
-
+const urlLocalHost = "${urlLocalHost}";
 
 
 /**
- * Listamos los modelos desde la DB
+ * Listamos los colores desde la DB
  */
-fetch(`http://localhost:3308/coloresListado`)
+fetch(`${urlLocalHost}coloresListado`)
   .then((res) => res.json())
   .then((data) => mostrarColor(data))
   .catch((error) => console.log(error));
@@ -67,7 +67,7 @@ function eliminarColor(tbody, boton) {
       id_color: idColor
     };
     $("#btnEliminarColorModal").on("click", function () {
-      fetch(`http://localhost:3308/gestionarColor/eliminarColor`, {
+      fetch(`${urlLocalHost}gestionarColor/eliminarColor`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(colorEliminado),
@@ -101,7 +101,7 @@ function modificarColor(tbody, boton) {
       colorModificado.descripcion = $("#inputDescripcion").val();
     }
     $("#btnGuardarColorModal").on("click", function () {
-      fetch(`http://localhost:3308/gestionarColor/modificarColor`, {
+      fetch(`${urlLocalHost}gestionarColor/modificarColor`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(colorModificado),
@@ -122,13 +122,26 @@ function CrearColor() {
     id_color: idColor,
     descripcion: descripcionColor,
   };
-  fetch(`http://localhost:3308/gestionarColor/altaColor`, {
+  fetch(`${urlLocalHost}gestionarColor/altaColor`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(nuevoColor),
-  }).catch((error) => console.log(error));
-  alert("Color Creado!!");
-  location.reload();
+  }).then(res => estadoOrden(res.status))
+  .catch((error) => console.log(error));
+const estadoOrden =  (estado)=>{
+if(estado === 201){
+alert('Color Creado');
+}
+if(estado === 409){
+alert('Color  Ya existente');
+}
+if(estado === 400){
+alert('Error: falta informacion de id color  y/o descripcion ');
+}
+if(estado === 500){
+alert('Error: no se creo el color ');
+}
+}
 }
 $("#btnGuardarColorModal").on("click", function () {
   CrearColor();

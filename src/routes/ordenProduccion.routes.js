@@ -79,6 +79,49 @@ router.get("/jornadaOrdenAsociadaLinea/:nro_linea", async (req, res) => {
     res.status(404).send("no se encontro jornada  asociada !!!");
   }
 });
- 
 
+router.get("/ordenActiva/:nro_op", async(req,res)=>{
+  const nombreApellidoUsuario = await db.OrdenProduccion.getOrdenActiva(req.params.nro_op);
+  if (nombreApellidoUsuario) {
+    res.status(200).json(nombreApellidoUsuario);
+  } else {
+    res.status(404).send("No se encontro orden activa ! ");
+  }
+});
+ 
+router.put("/cambiarEstadoOrdenProduccion", async(req,res)=>{
+  const  respuesta = await help.validarInformacionCambioDeEstado(req.body);
+ if(respuesta){
+  return res.status(400).send(respuesta);
+ }
+ const idEstadoEncontrado = await admi.buscarIdEstado(req.body.estado);
+ if(!idEstadoEncontrado){
+   res.status(404).send("no se encontro estado !!!");
+ }
+ req.body.estado = idEstadoEncontrado;
+ const cambiarEstadoOrdenProduccion = await db.OrdenProduccion.cambiarDisponibilidad(req.body);
+ if (cambiarEstadoOrdenProduccion) {
+   res.status(200).json(cambiarEstadoOrdenProduccion);
+ } else {
+   res.status(500).send("Falló al modificar la orden de produccion !!!");
+ }
+});
+
+router.put("/finalizarOrdenProduccion", async(req,res)=>{
+  const  respuesta = await help.validarInformacionFinalizarOrdenProduccion(req.body);
+ if(respuesta){
+  return res.status(400).send(respuesta);
+ }
+ const idEstadoEncontrado = await admi.buscarIdEstado(req.body.estado);
+ if(!idEstadoEncontrado){
+   res.status(404).send("no se encontro estado !!!");
+ }
+ req.body.estado = idEstadoEncontrado;
+ const finalizarOp = await admi.finalizarOrdenProduccion(req.body);
+ if(finalizarOp){
+  res.status(200).json(finalizarOp);
+}else{
+   res.status(500).send("Falló al finalizar la orden de produccion !!!");
+ }
+});
 module.exports = router;
