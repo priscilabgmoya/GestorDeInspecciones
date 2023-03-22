@@ -94,7 +94,7 @@ module.exports.modificarModelo = async function(modelo){
   let conn; 
   try{
     conn = await getConnection();
-    const SQL = `UPDATE ${tablaModelo}  SET descripcion=?,limite_superior_observado=?,limite_inferior_observado=?,limite_superior_reproceso=?,limite_inferior_reproceso=? WHERE sku=?`;
+    const SQL = `UPDATE ${tablaModelo}  SET denominacion=?,limite_superior_observado=?,limite_inferior_observado=?,limite_superior_reproceso=?,limite_inferior_reproceso=? WHERE sku=?`;
     const params=[]
     params[0]=modelo.denominacion
     params[1]=modelo.limite_superior_observado

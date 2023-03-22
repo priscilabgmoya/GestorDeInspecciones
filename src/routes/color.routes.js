@@ -26,7 +26,6 @@ router.get("/coloresDescripcion", async (req, res) => {
  */
 router.post("/gestionarColor/altaColor", async (req, res) => {
  let respuesta= await help.validarInformacionColor(req.body);
-//modifique lourdes
   if (respuesta) {
     res.status(400).send(respuesta);
     return;
@@ -51,7 +50,6 @@ router.post("/gestionarColor/altaColor", async (req, res) => {
  */
 router.put("/gestionarColor/modificarColor", async (req, res) => {
   let respuesta= await help.validarInformacionColor(req.body);
-//modifique lourdes
   if (respuesta) {
     res.status(400).send(respuesta);
     return;

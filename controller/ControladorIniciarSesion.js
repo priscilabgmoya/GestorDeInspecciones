@@ -69,16 +69,16 @@ function CrearUsuario() {
   let dni = $("#inputDniModal").val(),
     nombre = $("#inputNombreModal").val(),
     apellido = $("#inputApellidoModal").val(),
-    correo = $("#inputCorreoElectronicoModal").val();
+    correo = $("#inputCorreoElectronicoModal").val(),
+    TipoEmpleado  = $("#seleccionTipoEmpleadoModal").val();
 
   let nuevoUsuario = {
     dni: dni,
     nombre: nombre,
     apellido: apellido,
     correo_electronico: correo,
-    id_tipo_empleado: "",
-    contraseña: generatePassword(),
-    registro: activo,
+    id_tipo_empleado: TipoEmpleado,
+    contraseña: generatePassword()
   };
 
   fetch(`http://localhost:3308/gestionarUsuario/altaUsuario`, {

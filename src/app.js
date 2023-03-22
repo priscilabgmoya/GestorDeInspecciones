@@ -12,8 +12,10 @@ app.set("port",PORT);
 app.use(morgan("dev"));
 //permite leer el cuerpo de la solicitud en formato json
 app.use(express.json())
+//permite leer los datos enviados en un formulario standard
+app.use(express.urlencoded({extended: true}))
 //habilita Cross-Origin Resource Sharing a todas las rutas
-app.use(cors())
+app.use(cors());
 
 //rutas
 app.get('/',(req,res)=>{

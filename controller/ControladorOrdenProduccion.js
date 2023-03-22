@@ -1,8 +1,5 @@
 const disponibilidad = "disponible";
 const activa = 0;
-const en_proceso = 3;
-const pausada = 1; 
-const finalizada = 2; 
 const selectorLinea = document.getElementById("listadoNroLinea");
 const selectorModelo = document.getElementById("listadoModelo");
 const selectorColor = document.getElementById("listadoColor");
@@ -75,7 +72,7 @@ function cargarDatosEmpleados() {
 function habilitarBotones(turno) {
   
   if (turno === "mañana" || turno === "tarde") {
-    document.querySelector("#inputTurno").innerText = " "+turno; 
+    document.querySelector("#inputTurno").innerText = turno; 
     $("#btnCrearOrdenProduccion").prop("disabled", false);
     $("#inputNroOrdenProduccion").prop("disabled", false);
     $("#inputNroLinea").prop("disabled", false);
@@ -87,8 +84,7 @@ function habilitarBotones(turno) {
     alert("Fuera del Turno de Trabajo");
   }
 }
-
-function opcionesColor(selector) {
+function opcionesColor( selector) {
   fetch(`${localHost}coloresDescripcion`)
     .then((res) => res.json())
     .then((data) => mostrarOpciones(data))

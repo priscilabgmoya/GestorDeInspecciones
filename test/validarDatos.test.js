@@ -1,17 +1,19 @@
-
+/** modulos que usamos */
 const test = require('test');
 const assert = require('assert');
-const clases = require('../model/Class/Clases')
-const estados = require('../model/Class/estado')
-/**
- * CLASES QUE UTLIZAMOS PARA HACER LOS TEST 
- */
+
+/**las clases necesarias para hacer correr los test */
+const clases = require('../model/Class/Clases');
+const estados = require('../model/Class/estado');
+
+/** CLASES QUE UTLIZAMOS PARA HACER LOS TEST */
 const fecha = new Date();
 var modelo = new clases.Modelo(146,'nike',5,10,7,16);
 var color = new clases.Color(1897,'blanco');
 var Supervisorlinea = new clases.SupervisorLinea(45879,4879438741,'luis');
 var linea = new clases.Linea(2);
-var OrdenDeProduccion = new clases.OrdenDeProduccion(1243,fecha.toLocaleDateString(),fecha.toLocaleTimeString(),modelo,color,linea,Supervisorlinea)
+var OrdenDeProduccion = new clases.OrdenDeProduccion(1243,fecha.toLocaleDateString(),fecha.toLocaleTimeString(),modelo,color,linea,Supervisorlinea);
+
 /* TEST */
 test('CREAR MODELO', async (t) => {
     await t.test('', (t)=>{
@@ -24,7 +26,7 @@ test('CREAR MODELO', async (t) => {
     });
 });
 
-test('CREAR ORDEN DE PRODUCCION ',async(t)=>{
+test('CREAR ORDEN DE PRODUCCION',async(t)=>{
 
     await t.test('',(t)=>{
         assert.notEqual(OrdenDeProduccion,null)

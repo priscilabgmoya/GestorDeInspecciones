@@ -3,7 +3,7 @@
  */
 
 const bodyColor = document.getElementById("bodyTablaColor");
-const urlLocalHost = "${urlLocalHost}";
+const urlLocalHost = "http://localhost:3308/";
 
 
 /**
@@ -100,6 +100,7 @@ function modificarColor(tbody, boton) {
     if (colorModificado.descripcion === "") {
       colorModificado.descripcion = $("#inputDescripcion").val();
     }
+    //ver de cambiar el modal
     $("#btnGuardarColorModal").on("click", function () {
       fetch(`${urlLocalHost}gestionarColor/modificarColor`, {
         method: "PUT",
@@ -133,7 +134,7 @@ if(estado === 201){
 alert('Color Creado');
 }
 if(estado === 409){
-alert('Color  Ya existente');
+alert(' ID Color existente');
 }
 if(estado === 400){
 alert('Error: falta informacion de id color  y/o descripcion ');
@@ -161,4 +162,5 @@ function activarInputs() {
 
   $("button.btnEditar").prop("disabled", true);
   $("button.btnEliminar").prop("disabled", true);
+  $("#btnAñadirColor").prop("disabled", true);
 }

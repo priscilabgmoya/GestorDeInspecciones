@@ -42,10 +42,12 @@ main{
 
 }
 
-
+#semaforoIncidencia{
+  padding-top: 284px;
+}
 
 #GestionColor{
-  padding-top: 231px;
+  padding-top: 550px;
 }
 #lineaControl {
   padding-top: 397px;
@@ -67,5 +69,86 @@ main{
 }
 
 #GestionUsuarios{
-  padding-top: 337px;
+  padding-top: 647px;
+}
+
+
+.containerReprocesos{
+  display: grid;
+  place-items: center;
+}
+.containerObservados{
+  display: grid;
+place-items: center;
+}
+.semaforoObservados{
+  width: 200px;
+  height: 80px;
+  border-radius: 23px;
+  display: grid;
+  place-items: center;
+  background-color: #1b1d21;
+  padding: 10px;
+  display: flex;
+ 
+}
+
+.semaforoReprocesos{
+  width: 200px;
+  height: 80px;
+  border-radius: 23px;
+  display: grid;
+  place-items: center;
+  background-color: #1b1d21;
+  padding: 10px;
+  display: flex;
+}
+
+.luces-circulo_observados{
+  display: block;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgb(0, 0,0,0.3);
+  position: relative;
+}
+.luces-circulo_observados::after{
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border-right: 4px solid rgb(255, 255,255,0.6);
+  top: 5%;
+}
+.luces-circulo_reproceso{
+  display: block;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgb(0, 0,0,0.3);
+  position:relative;
+}
+.luces-circulo_reproceso::after{
+  content: '';
+ position: absolute;
+ width: 60px;
+ height: 60px;
+  border-radius: 50%;
+  border-right: 4px solid rgb(255, 255,255,0.6);
+  top: 5%;
+
+}
+
+.red{
+  background-color: #f11414;
+  box-shadow: 0 0 10px 1px #f11414;
+}
+.yellow{
+  background-color: #f7e306;
+  box-shadow: 0 0 10px 1px  #f7e306;
+}
+.green{
+  background-color: #22d50b;
+  box-shadow: 0 0 10px 1px #22d50b;
 }
