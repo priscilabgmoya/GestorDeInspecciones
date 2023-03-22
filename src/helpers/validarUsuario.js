@@ -2,7 +2,7 @@ module.exports.validarInformacionUsuario = async function(usuario){
     if (!usuario.dni) {
         return "DNI es requerido";
       }
-      if (!usuariocorreo_electronico) {
+      if (!usuario.correo_electronico) {
         return"Correo Electronico es requerido";
       }
       if (!usuario.id_tipo_empleado) {
@@ -22,7 +22,7 @@ module.exports.validarInformacionUsuarioModificado  = async function(usuario){
     if (!usuario.dni) {
         return "DNI es requerido";
       }
-      if (!usuariocorreo_electronico) {
+      if (!usuario.correo_electronico) {
         return"Correo Electronico es requerido";
       }
       if (!usuario.id_tipo_empleado) {

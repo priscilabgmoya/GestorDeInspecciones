@@ -111,10 +111,12 @@ class OrdenDeProduccion{
         this.jornada = this.crearJornada(fechaInicio)
 
     }
+    /**cuando se asocia un sup de calidad a la inspeccion de una orden de produccion */
     crearJornada(fecha_inicio){
         const fecha = new Date();
         return new JornadaLaboral(fecha_inicio,(fecha.getHours()-2),(fecha.getHours()+4))
     }
+    
     finalizarOrdenProduccion(){
         this.estado = estados.Estado.finalizada
     }
