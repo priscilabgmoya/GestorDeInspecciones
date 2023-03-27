@@ -1,4 +1,4 @@
-# Sistema de Gestión de Calzado
+# Sistema de Gestión de Calzado - Grupo 2
 ### Descripcion del sistema 
 programacion para el frond-end 
 1. **HTML5**

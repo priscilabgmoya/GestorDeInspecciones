@@ -1,7 +1,7 @@
-/node_modules
-/prueba.js
-/package.json
-/package-lock.json
+node_modules
+prueba.js
+package.json
+package-lock.json
 /clase1-11.txt
-/.vscode
-/.env
+.vscode
+.env
