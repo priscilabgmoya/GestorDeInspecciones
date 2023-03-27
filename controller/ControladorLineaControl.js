@@ -222,10 +222,10 @@ function opcionesLineas(selector) {
 }
 function cargarInspeccion() {
   contadorPrimera();
-  /* contadorDefecto("#tablaPieIzquierdoReproceso","izquierdo","Reproceso") 
+ contadorDefecto("#tablaPieIzquierdoReproceso","izquierdo","Reproceso") 
     contadorDefecto("#tablaDerechoReproceso tbody","derecho","Reproceso") 
     contadorDefecto("#tablaIzquierdoObservado tbody","izquierdo","Observado")
-    contadorDefecto("#tablaDerechoObservado tbody","derecho","Observado")*/
+    contadorDefecto("#tablaDerechoObservado tbody","derecho","Observado")
 }
 console.log(JSON.parse(localStorage.getItem("primeraEncontradas")));
 let prueba = primeraEncontrados.filter(
