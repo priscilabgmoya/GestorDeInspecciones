@@ -1,7 +1,6 @@
 node_modules
 prueba.js
-package.json
-package-lock.json
 /clase1-11.txt
 .vscode
 .env
+/respaldo-sistemas_de_gestion_calzado.sql
